@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,9 +11,9 @@ package chess;
  */
 public class ChessBoard {
 
-    private ChessPiece[][] board = new ChessPiece[8][8];
+    private ChessPiece[][] board;
     public ChessBoard() {
-
+        resetBoard();
     }
 
     /**
@@ -20,7 +23,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()][position.getColumn()] = piece;
+        board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -32,7 +35,7 @@ public class ChessBoard {
      */
 
     public ChessPiece getPiece(ChessPosition position) {
-        return board[position.getRow()][position.getColumn()];
+        return board[position.getRow() - 1][position.getColumn() - 1];
     }
 
     /**
@@ -41,5 +44,45 @@ public class ChessBoard {
      */
     public void resetBoard() {
         board = new ChessPiece[8][8];
+        GeneratePieces();
+    }
+
+    private void GeneratePieces(){
+        List<ChessPiece> blackBackRow = new ArrayList<>();
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
+        blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
+
+        List<ChessPiece> blackFrontRow = new ArrayList<>();
+        for(int i = 0; i < board[0].length; i++){
+            blackFrontRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
+        }
+        PopulateRow(blackBackRow, 8);
+        PopulateRow(blackFrontRow, 7);
+
+        List<ChessPiece> whiteBackRow = ColorChangeToWhite(blackBackRow);
+        List<ChessPiece> whiteFrontRow = ColorChangeToWhite(blackFrontRow);
+
+        PopulateRow(whiteFrontRow, 2);
+        PopulateRow(whiteBackRow, 1);
+    }
+
+    private void PopulateRow(List<ChessPiece> pieces, int row){
+        for(int i = 1; i <= board[row - 1].length; i++){
+            addPiece(new ChessPosition(row, i), pieces.get(i - 1));
+        }
+    }
+
+    private List<ChessPiece> ColorChangeToWhite(List<ChessPiece> row){
+        List<ChessPiece> convertedRow = new ArrayList<>();
+        for(ChessPiece piece : row){
+            convertedRow.add(new ChessPiece(ChessGame.TeamColor.WHITE, piece.getPieceType()));
+        }
+        return convertedRow;
     }
 }
