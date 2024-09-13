@@ -21,14 +21,14 @@ public class ChessPosition {
      * @return which row this position is in
      * 1 codes for the bottom row
      */
-    public int getRow() { return row; }
+    public int getRow() { return row - 1; }
 
     /**
      * @return which column this position is in
      * 1 codes for the left row
      */
     public int getColumn() {
-        return col;
+        return col - 1;
     }
 
     @Override
