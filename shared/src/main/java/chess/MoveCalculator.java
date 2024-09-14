@@ -105,15 +105,16 @@ public class MoveCalculator {
             else if (blocked.getTeamColor() != color){
                 if(!isPawnForwardBlock) {
                     validMove.add(move);
-                    if (movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT) {
+                    if (movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT && movingPiece.getPieceType() != ChessPiece.PieceType.PAWN) {
                         break;
                     }
                 }
             }
+            else if(movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT && (!isPawnForwardBlock)){
+                break;
+            }
             else{
-                if(movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT || movingPiece.getPieceType() != ChessPiece.PieceType.PAWN){
-                    break;
-                }
+                break;
             }
         }
 
@@ -301,14 +302,14 @@ public class MoveCalculator {
                 move = reset;
             }
             else {
-                if(Down(move) != null){
-                    unvalidatedMoves.add(Down(move));
-                }
                 if(DownLeft(move) != null && board.getPiece(DownLeft(move).end) != null && board.getPiece(DownLeft(move).end).getTeamColor() != color){
                     unvalidatedMoves.add(DownLeft(move));
                 }
                 if(DownRight(move) != null && board.getPiece(DownRight(move).end) != null && board.getPiece(DownRight(move).end).getTeamColor() != color){
                     unvalidatedMoves.add(DownRight(move));
+                }
+                if(Down(move) != null){
+                    unvalidatedMoves.add(Down(move));
                 }
             }
         }
@@ -326,14 +327,14 @@ public class MoveCalculator {
                 move = reset;
             }
             else {
-                if(Up(move) != null){
-                    unvalidatedMoves.add(Up(move));
-                }
                 if(UpLeft(move) != null && board.getPiece(UpLeft(move).end) != null && board.getPiece(UpLeft(move).end).getTeamColor() != color){
                     unvalidatedMoves.add(UpLeft(move));
                 }
                 if(UpRight(move) != null && board.getPiece(UpRight(move).end) != null && board.getPiece(UpRight(move).end).getTeamColor() != color){
                     unvalidatedMoves.add(UpRight(move));
+                }
+                if(Up(move) != null){
+                    unvalidatedMoves.add(Up(move));
                 }
             }
         }
