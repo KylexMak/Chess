@@ -63,6 +63,10 @@ public class ChessPiece {
                 moves.addAll(calculateMoves.BishopMoves(myPosition, piece.getTeamColor()));
             case KING ->
                 moves.addAll(calculateMoves.KingMoves(myPosition,piece.getTeamColor()));
+            case KNIGHT ->
+                moves.addAll(calculateMoves.KnightMoves(myPosition, piece.getTeamColor()));
+            case PAWN ->
+                moves.addAll(calculateMoves.PawnMove(myPosition, piece.getTeamColor()));
         }return moves;
     }
 
