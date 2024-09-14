@@ -1,5 +1,6 @@
 package chess;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -110,11 +111,13 @@ public class MoveCalculator {
                     }
                 }
             }
-            else if(movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT && (!isPawnForwardBlock)){
+            else if(movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT && (!isPawnForwardBlock || movingPiece.getPieceType() != ChessPiece.PieceType.PAWN)){
                 break;
             }
             else{
-                break;
+                if(movingPiece.getPieceType() != ChessPiece.PieceType.KNIGHT){
+                    break;
+                }
             }
         }
 
@@ -361,6 +364,48 @@ public class MoveCalculator {
         }
         validMoves.addAll(promotions);
         validMoves.removeIf(Objects::isNull);
+        return validMoves;
+    }
+
+    public Collection<ChessMove> RookMoves(ChessPosition position, ChessGame.TeamColor color) {
+        ChessMove moves = new ChessMove(position, position, null);
+        List<ChessMove> unvalidatedMoves = new ArrayList<>();
+        List<ChessMove> validMoves = new ArrayList<>();
+        while (Up(moves) != null) {
+            unvalidatedMoves.add(Up(moves));
+            moves = Up(moves);
+        }
+        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        unvalidatedMoves.clear();
+        moves.end = position;
+        while (Down(moves) != null) {
+            unvalidatedMoves.add(Down(moves));
+            moves = Down(moves);
+        }
+        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        unvalidatedMoves.clear();
+        moves.end = position;
+        while(Left(moves) != null){
+            unvalidatedMoves.add(Left(moves));
+            moves = Left(moves);
+        }
+        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        unvalidatedMoves.clear();
+        moves.end = position;
+        while(Right(moves) != null){
+            unvalidatedMoves.add(Right(moves));
+            moves = Right(moves);
+        }
+        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        unvalidatedMoves.clear();
+        validMoves.removeIf(Objects::isNull);
+        return validMoves;
+    }
+
+    public Collection<ChessMove> QueenMoves(ChessPosition position, ChessGame.TeamColor color){
+        List<ChessMove> validMoves = new ArrayList<>();
+        validMoves.addAll(BishopMoves(position, color));
+        validMoves.addAll(RookMoves(position, color));
         return validMoves;
     }
 }
