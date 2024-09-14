@@ -1,7 +1,9 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.List;
 
 /**
  * Represents a single chess piece
@@ -53,7 +55,15 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not yet implemented");
+        ChessPiece piece = board.getPiece(myPosition);
+        List<ChessMove> moves = new ArrayList<>();
+        MoveCalculator calculateMoves = new MoveCalculator(board, myPosition);
+        switch(piece.getPieceType()){
+            case BISHOP ->
+                moves.addAll(calculateMoves.BishopMoves(myPosition, piece.getTeamColor()));
+            case KING ->
+                moves.addAll(calculateMoves.KingMoves(myPosition,piece.getTeamColor()));
+        }return moves;
     }
 
     @Override

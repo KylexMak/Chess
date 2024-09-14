@@ -13,9 +13,9 @@ import java.util.Objects;
  */
 public class ChessBoard {
 
-    private ChessPiece[][] board;
+    private ChessPiece[][] board = new ChessPiece[8][8];
     public ChessBoard() {
-        resetBoard();
+       //resetBoard();
     }
 
     /**
@@ -45,7 +45,7 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        this.board = new ChessPiece[8][8];
+        board = new ChessPiece[8][8];
         GeneratePieces();
     }
 
