@@ -202,13 +202,15 @@ public class ChessGame {
                     ChessPiece piece = board.getPiece(parsePosition);
                     if(piece != null && piece.getTeamColor() == teamColor){
                         availableMoves.addAll(validMoves(new ChessPosition(i, j)));
-                        if(!availableMoves.isEmpty()){
+                        if(!availableMoves.isEmpty()) {
                             return false;
                         }
                     }
                 }
             }
-
+        }
+        else{
+            return false;
         }
         return true;
     }
