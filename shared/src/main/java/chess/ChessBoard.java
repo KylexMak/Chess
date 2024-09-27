@@ -47,10 +47,10 @@ public class ChessBoard {
      */
     public void resetBoard() {
         board = new ChessPiece[8][8];
-        GeneratePieces();
+        generatePieces();
     }
 
-    private void GeneratePieces(){
+    private void generatePieces(){
         List<ChessPiece> blackBackRow = new ArrayList<>();
         blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
         blackBackRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
@@ -65,23 +65,23 @@ public class ChessBoard {
         for(int i = 0; i < board[0].length; i++){
             blackFrontRow.add(new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
-        PopulateRow(blackBackRow, 8);
-        PopulateRow(blackFrontRow, 7);
+        populateRow(blackBackRow, 8);
+        populateRow(blackFrontRow, 7);
 
-        List<ChessPiece> whiteBackRow = ColorChangeToWhite(blackBackRow);
-        List<ChessPiece> whiteFrontRow = ColorChangeToWhite(blackFrontRow);
+        List<ChessPiece> whiteBackRow = colorChangeToWhite(blackBackRow);
+        List<ChessPiece> whiteFrontRow = colorChangeToWhite(blackFrontRow);
 
-        PopulateRow(whiteFrontRow, 2);
-        PopulateRow(whiteBackRow, 1);
+        populateRow(whiteFrontRow, 2);
+        populateRow(whiteBackRow, 1);
     }
 
-    private void PopulateRow(List<ChessPiece> pieces, int row){
+    private void populateRow(List<ChessPiece> pieces, int row){
         for(int i = 1; i <= board[row - 1].length; i++){
             addPiece(new ChessPosition(row, i), pieces.get(i - 1));
         }
     }
 
-    private List<ChessPiece> ColorChangeToWhite(List<ChessPiece> row){
+    private List<ChessPiece> colorChangeToWhite(List<ChessPiece> row){
         List<ChessPiece> convertedRow = new ArrayList<>();
         for(ChessPiece piece : row){
             convertedRow.add(new ChessPiece(ChessGame.TeamColor.WHITE, piece.getPieceType()));

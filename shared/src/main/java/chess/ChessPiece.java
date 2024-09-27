@@ -60,17 +60,17 @@ public class ChessPiece {
         MoveCalculator calculateMoves = new MoveCalculator(board, myPosition);
         switch(piece.getPieceType()){
             case BISHOP ->
-                moves.addAll(calculateMoves.BishopMoves(myPosition, piece.getTeamColor()));
+                moves.addAll(calculateMoves.bishopMoves(myPosition, piece.getTeamColor()));
             case KING ->
-                moves.addAll(calculateMoves.KingMoves(myPosition,piece.getTeamColor()));
+                moves.addAll(calculateMoves.kingMoves(myPosition,piece.getTeamColor()));
             case KNIGHT ->
-                moves.addAll(calculateMoves.KnightMoves(myPosition, piece.getTeamColor()));
+                moves.addAll(calculateMoves.knightMoves(myPosition, piece.getTeamColor()));
             case PAWN ->
-                moves.addAll(calculateMoves.PawnMove(myPosition, piece.getTeamColor()));
+                moves.addAll(calculateMoves.pawnMove(myPosition, piece.getTeamColor()));
             case ROOK ->
-                moves.addAll(calculateMoves.RookMoves(myPosition, piece.getTeamColor()));
+                moves.addAll(calculateMoves.rookMoves(myPosition, piece.getTeamColor()));
             case QUEEN ->
-                moves.addAll(calculateMoves.QueenMoves(myPosition, piece.getTeamColor()));
+                moves.addAll(calculateMoves.queenMoves(myPosition, piece.getTeamColor()));
         }return moves;
     }
 

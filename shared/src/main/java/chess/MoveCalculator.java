@@ -13,7 +13,7 @@ public class MoveCalculator {
         this.position = position;
     }
 
-    private ChessMove UpLeft(ChessMove move){
+    private ChessMove upLeft(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() < 7 && position.getRow() >= 0 && position.getColumn() <= 7 && position.getColumn() > 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row + 1, move.getEndPosition().col - 1);
@@ -23,7 +23,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove UpRight(ChessMove move){
+    private ChessMove upRight(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() < 7 && position.getRow() >= 0 && position.getColumn() < 7 && position.getColumn() >= 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row + 1, move.getEndPosition().col + 1);
@@ -33,7 +33,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove DownLeft(ChessMove move){
+    private ChessMove downLeft(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() <= 7 && position.getRow() > 0 && position.getColumn() <= 7 && position.getColumn() > 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row - 1, move.getEndPosition().col - 1);
@@ -43,7 +43,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove DownRight(ChessMove move){
+    private ChessMove downRight(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() <= 7 && position.getRow() > 0 && position.getColumn() < 7 && position.getColumn() >= 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row - 1, move.getEndPosition().col + 1);
@@ -53,7 +53,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove Up(ChessMove move){
+    private ChessMove up(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() < 7 && position.getRow() >= 0 && position.getColumn() <= 7 && position.getColumn() >= 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row + 1, move.getEndPosition().col);
@@ -63,7 +63,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove Down(ChessMove move){
+    private ChessMove down(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() <= 7 && position.getRow() > 0 && position.getColumn() <= 7 && position.getColumn() >= 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row - 1, move.getEndPosition().col);
@@ -73,7 +73,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove Right(ChessMove move){
+    private ChessMove right(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() <= 7 && position.getRow() >= 0 && position.getColumn() < 7 && position.getColumn() >= 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row , move.getEndPosition().col + 1);
@@ -83,7 +83,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private ChessMove Left(ChessMove move){
+    private ChessMove left(ChessMove move){
         ChessPosition position = move.end;
         if(position.getRow() <= 7 && position.getRow() >= 0 && position.getColumn() <= 7 && position.getColumn() > 0){
             ChessPosition end = new ChessPosition(move.getEndPosition().row, move.getEndPosition().col - 1);
@@ -93,7 +93,7 @@ public class MoveCalculator {
             return null;
         }
     }
-    private List<ChessMove> ValidateMoves(List<ChessMove> unvalidatedMoves, ChessGame.TeamColor color){
+    private List<ChessMove> validateMoves(List<ChessMove> unvalidatedMoves, ChessGame.TeamColor color){
         List<ChessMove> validMove = new ArrayList<>();
         for(ChessMove move: unvalidatedMoves){
             ChessPiece movingPiece = board.getPiece(move.start);
@@ -123,169 +123,169 @@ public class MoveCalculator {
 
         return validMove;
     }
-    public Collection<ChessMove> BishopMoves(ChessPosition position, ChessGame.TeamColor color) {
+    public Collection<ChessMove> bishopMoves(ChessPosition position, ChessGame.TeamColor color) {
         ChessMove moves = new ChessMove(position, position, null);
         List<ChessMove> unvalidatedMoves = new ArrayList<>();
         List<ChessMove> validMoves = new ArrayList<>();
-        while (UpLeft(moves) != null) {
-            unvalidatedMoves.add(UpLeft(moves));
-            moves = UpLeft(moves);
+        while (upLeft(moves) != null) {
+            unvalidatedMoves.add(upLeft(moves));
+            moves = upLeft(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while (UpRight(moves) != null) {
-            unvalidatedMoves.add(UpRight(moves));
-            moves = UpRight(moves);
+        while (upRight(moves) != null) {
+            unvalidatedMoves.add(upRight(moves));
+            moves = upRight(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while(DownLeft(moves) != null){
-            unvalidatedMoves.add(DownLeft(moves));
-            moves = DownLeft(moves);
+        while(downLeft(moves) != null){
+            unvalidatedMoves.add(downLeft(moves));
+            moves = downLeft(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while(DownRight(moves) != null){
-            unvalidatedMoves.add(DownRight(moves));
-            moves = DownRight(moves);
+        while(downRight(moves) != null){
+            unvalidatedMoves.add(downRight(moves));
+            moves = downRight(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         validMoves.removeIf(Objects::isNull);
         return validMoves;
     }
-    public Collection<ChessMove> KingMoves(ChessPosition position, ChessGame.TeamColor color){
+    public Collection<ChessMove> kingMoves(ChessPosition position, ChessGame.TeamColor color){
         ChessMove moves = new ChessMove(position, position, null);
         List<ChessMove> unvalidatedMoves = new ArrayList<>();
         List<ChessMove> validMoves = new ArrayList<>();
-        if(UpLeft(moves) != null){
-            unvalidatedMoves.add(UpLeft(moves));
+        if(upLeft(moves) != null){
+            unvalidatedMoves.add(upLeft(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Up(moves) != null){
-            unvalidatedMoves.add(Up(moves));
+        if(up(moves) != null){
+            unvalidatedMoves.add(up(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(UpRight(moves) != null){
-            unvalidatedMoves.add(UpRight(moves));
+        if(upRight(moves) != null){
+            unvalidatedMoves.add(upRight(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Left(moves) != null){
-            unvalidatedMoves.add(Left(moves));
+        if(left(moves) != null){
+            unvalidatedMoves.add(left(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Right(moves) != null){
-            unvalidatedMoves.add(Right(moves));
+        if(right(moves) != null){
+            unvalidatedMoves.add(right(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(DownLeft(moves) != null){
-            unvalidatedMoves.add(DownLeft(moves));
+        if(downLeft(moves) != null){
+            unvalidatedMoves.add(downLeft(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Down(moves) != null){
-            unvalidatedMoves.add(Down(moves));
+        if(down(moves) != null){
+            unvalidatedMoves.add(down(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(DownRight(moves) != null){
-            unvalidatedMoves.add(DownRight(moves));
+        if(downRight(moves) != null){
+            unvalidatedMoves.add(downRight(moves));
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         validMoves.removeIf(Objects::isNull);
         return validMoves;
     }
 
-    public Collection<ChessMove> KnightMoves(ChessPosition position, ChessGame.TeamColor color){
+    public Collection<ChessMove> knightMoves(ChessPosition position, ChessGame.TeamColor color){
         ChessMove moves = new ChessMove(position, position, null);
         ChessMove reset = new ChessMove(position, position, null);
         List<ChessMove> unvalidatedMoves = new ArrayList<>();
         List<ChessMove> validMoves = new ArrayList<>();
-        if(Up(moves) != null){
-            moves = Up(moves);
-            if(UpLeft(moves) != null){
-                moves.end = UpLeft(moves).getEndPosition();
+        if(up(moves) != null){
+            moves = up(moves);
+            if(upLeft(moves) != null){
+                moves.end = upLeft(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
-            moves = Up(reset);
-            if(UpRight(moves) != null){
-                moves.end = UpRight(moves).getEndPosition();
-                moves.start = position;
-                unvalidatedMoves.add(moves);
-            }
-            moves = reset;
-        }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
-        unvalidatedMoves.clear();
-        if(Right(moves) != null){
-            moves = Right(moves);
-            if(UpRight(moves) != null){
-                moves.end = UpRight(moves).getEndPosition();
-                moves.start = position;
-                unvalidatedMoves.add(moves);
-            }
-            moves = Right(reset);
-            if(DownRight(moves) != null){
-                moves.end = DownRight(moves).getEndPosition();
+            moves = up(reset);
+            if(upRight(moves) != null){
+                moves.end = upRight(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
             moves = reset;
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Down(moves) != null){
-            moves = Down(moves);
-            if(DownRight(moves) != null){
-                moves.end = DownRight(moves).getEndPosition();
+        if(right(moves) != null){
+            moves = right(moves);
+            if(upRight(moves) != null){
+                moves.end = upRight(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
-            moves = Down(reset);
-            if(DownLeft(moves) != null){
-                moves.end = DownLeft(moves).getEndPosition();
+            moves = right(reset);
+            if(downRight(moves) != null){
+                moves.end = downRight(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
             moves = reset;
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
-        if(Left(moves) != null){
-            moves = Left(moves);
-            if(DownLeft(moves) != null){
-                moves.end = DownLeft(moves).getEndPosition();
+        if(down(moves) != null){
+            moves = down(moves);
+            if(downRight(moves) != null){
+                moves.end = downRight(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
-            moves = Left(reset);
-            if(UpLeft(moves) != null){
-                moves.end = UpLeft(moves).getEndPosition();
+            moves = down(reset);
+            if(downLeft(moves) != null){
+                moves.end = downLeft(moves).getEndPosition();
+                moves.start = position;
+                unvalidatedMoves.add(moves);
+            }
+            moves = reset;
+        }
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
+        unvalidatedMoves.clear();
+        if(left(moves) != null){
+            moves = left(moves);
+            if(downLeft(moves) != null){
+                moves.end = downLeft(moves).getEndPosition();
+                moves.start = position;
+                unvalidatedMoves.add(moves);
+            }
+            moves = left(reset);
+            if(upLeft(moves) != null){
+                moves.end = upLeft(moves).getEndPosition();
                 moves.start = position;
                 unvalidatedMoves.add(moves);
             }
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         validMoves.removeIf(Objects::isNull);
         return validMoves;
     }
-    public Collection<ChessMove> PawnMove(ChessPosition position, ChessGame.TeamColor color){
+    public Collection<ChessMove> pawnMove(ChessPosition position, ChessGame.TeamColor color){
         ChessMove moves = new ChessMove(position, position, null);
-        List<ChessMove> validMoves = PawnMovement(moves, color);
+        List<ChessMove> validMoves = pawnMovement(moves, color);
         return validMoves;
     }
-    private List<ChessMove> PawnMovement(ChessMove move, ChessGame.TeamColor color){
+    private List<ChessMove> pawnMovement(ChessMove move, ChessGame.TeamColor color){
         ChessMove reset = move;
         ChessMove temp;
         List<ChessMove> unvalidatedMoves = new ArrayList<>();
@@ -294,26 +294,26 @@ public class MoveCalculator {
         List<ChessMove> promotions = new ArrayList<>();
         if(color == ChessGame.TeamColor.BLACK){
             if(position.row == 7){
-                if(Down(move) != null){
-                    unvalidatedMoves.add(Down(move));
-                    move = Down(move);
-                    if(Down(move) != null){
-                        move.end = Down(move).getEndPosition();
+                if(down(move) != null){
+                    unvalidatedMoves.add(down(move));
+                    move = down(move);
+                    if(down(move) != null){
+                        move.end = down(move).getEndPosition();
                         move.start = reset.getStartPosition();
                         unvalidatedMoves.add(move);
                     }
                 }
             }
             else {
-                temp = DownLeft(move);
+                temp = downLeft(move);
                 if(temp != null && board.getPiece(temp.end) != null && board.getPiece(temp.end).getTeamColor() != color){
                     unvalidatedMoves.add(temp);
                 }
-                temp = DownRight(move);
+                temp = downRight(move);
                 if(temp != null && board.getPiece(temp.end) != null && board.getPiece(temp.end).getTeamColor() != color){
                     unvalidatedMoves.add(temp);
                 }
-                temp = Down(move);
+                temp = down(move);
                 if(temp != null){
                     unvalidatedMoves.add(temp);
                 }
@@ -321,11 +321,11 @@ public class MoveCalculator {
         }
         else{
             if(position.row == 2){
-                if(Up(move) != null){
-                    unvalidatedMoves.add(Up(move));
-                    move = Up(move);
-                    if(Up(move) != null){
-                        move.end = Up(move).getEndPosition();
+                if(up(move) != null){
+                    unvalidatedMoves.add(up(move));
+                    move = up(move);
+                    if(up(move) != null){
+                        move.end = up(move).getEndPosition();
                         move.start = reset.getStartPosition();
                         unvalidatedMoves.add(move);
                     }
@@ -333,21 +333,21 @@ public class MoveCalculator {
                 move = reset;
             }
             else {
-                temp = UpLeft(move);
+                temp = upLeft(move);
                 if(temp != null && board.getPiece(temp.end) != null && board.getPiece(temp.end).getTeamColor() != color){
                     unvalidatedMoves.add(temp);
                 }
-                temp = UpRight(move);
+                temp = upRight(move);
                 if(temp != null && board.getPiece(temp.end) != null && board.getPiece(temp.end).getTeamColor() != color){
                     unvalidatedMoves.add(temp);
                 }
-                temp = Up(move);
+                temp = up(move);
                 if(temp != null){
                     unvalidatedMoves.add(temp);
                 }
             }
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         for(ChessMove promo : validMoves){
             if(promo.getEndPosition().row == 1 || promo.getEndPosition().row == 8){
                 ChessMove promoMove = new ChessMove(promo.start, promo.end, ChessPiece.PieceType.QUEEN);
@@ -373,45 +373,45 @@ public class MoveCalculator {
         return validMoves;
     }
 
-    public Collection<ChessMove> RookMoves(ChessPosition position, ChessGame.TeamColor color) {
+    public Collection<ChessMove> rookMoves(ChessPosition position, ChessGame.TeamColor color) {
         ChessMove moves = new ChessMove(position, position, null);
         List<ChessMove> unvalidatedMoves = new ArrayList<>();
         List<ChessMove> validMoves = new ArrayList<>();
-        while (Up(moves) != null) {
-            unvalidatedMoves.add(Up(moves));
-            moves = Up(moves);
+        while (up(moves) != null) {
+            unvalidatedMoves.add(up(moves));
+            moves = up(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while (Down(moves) != null) {
-            unvalidatedMoves.add(Down(moves));
-            moves = Down(moves);
+        while (down(moves) != null) {
+            unvalidatedMoves.add(down(moves));
+            moves = down(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while(Left(moves) != null){
-            unvalidatedMoves.add(Left(moves));
-            moves = Left(moves);
+        while(left(moves) != null){
+            unvalidatedMoves.add(left(moves));
+            moves = left(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         moves.end = position;
-        while(Right(moves) != null){
-            unvalidatedMoves.add(Right(moves));
-            moves = Right(moves);
+        while(right(moves) != null){
+            unvalidatedMoves.add(right(moves));
+            moves = right(moves);
         }
-        validMoves.addAll(ValidateMoves(unvalidatedMoves, color));
+        validMoves.addAll(validateMoves(unvalidatedMoves, color));
         unvalidatedMoves.clear();
         validMoves.removeIf(Objects::isNull);
         return validMoves;
     }
 
-    public Collection<ChessMove> QueenMoves(ChessPosition position, ChessGame.TeamColor color){
+    public Collection<ChessMove> queenMoves(ChessPosition position, ChessGame.TeamColor color){
         List<ChessMove> validMoves = new ArrayList<>();
-        validMoves.addAll(BishopMoves(position, color));
-        validMoves.addAll(RookMoves(position, color));
+        validMoves.addAll(bishopMoves(position, color));
+        validMoves.addAll(rookMoves(position, color));
         return validMoves;
     }
 }
