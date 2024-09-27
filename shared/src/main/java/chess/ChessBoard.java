@@ -15,7 +15,7 @@ public class ChessBoard {
 
     private ChessPiece[][] board = new ChessPiece[8][8];
     public ChessBoard() {
-       resetBoard();
+       //resetBoard();
     }
 
     /**
@@ -86,6 +86,24 @@ public class ChessBoard {
             convertedRow.add(new ChessPiece(ChessGame.TeamColor.WHITE, piece.getPieceType()));
         }
         return convertedRow;
+    }
+
+    public ChessBoard copy(){
+        ChessBoard copy = new ChessBoard();
+        for(int i = 1; i <= 8; i++){
+            for(int j = 1; j <= 8; j++){
+                ChessPosition position = new ChessPosition(i , j);
+                ChessPiece piece = this.getPiece(position);
+                if(piece != null){
+                    ChessPiece copyPiece = new ChessPiece(piece.getTeamColor(), piece.getPieceType());
+                    copy.board[i - 1][j - 1] = copyPiece;
+                }
+                else{
+                    copy.board[i - 1][j - 1] = null;
+                }
+            }
+        }
+        return copy;
     }
 
     @Override

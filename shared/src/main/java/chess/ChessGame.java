@@ -1,6 +1,9 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -12,8 +15,7 @@ public class ChessGame {
     TeamColor currentTurn;
     ChessBoard board;
     public ChessGame() {
-        board = new ChessBoard();
-        currentTurn = TeamColor.WHITE;
+
     }
 
     /**
@@ -32,6 +34,7 @@ public class ChessGame {
         currentTurn = team;
     }
 
+
     /**
      * Enum identifying the 2 possible teams in a chess game
      */
@@ -48,9 +51,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ChessBoard activeGame = getBoard();
-        ChessPiece currentPiece = activeGame.getPiece(startPosition);
-        return currentPiece.pieceMoves(activeGame, startPosition);
+        ChessBoard activeGame = getBoard().copy();
+        ChessPiece piece = activeGame.getPiece(startPosition);
+        Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
+        List<ChessMove> validMoves = new ArrayList<>();
+        if(piece == null){
+            return null;
+        }
+        for(ChessMove move : moves){
+            board.addPiece(move.getStartPosition(), null);
+            board.addPiece(move.getEndPosition(), piece);
+            if(!isInCheck(piece.getTeamColor())) {
+                validMoves.add(move);
+            }
+           this.board = activeGame.copy();
+        }
+        return validMoves;
     }
 
     /**
@@ -75,10 +91,10 @@ public class ChessGame {
             for(int j = 1; j <= 8; j++){
                 ChessPosition enemyPosition = new ChessPosition(i, j);
                 ChessPiece enemyPiece = board.getPiece(enemyPosition);
-                if(enemyPiece != null){
+                if(enemyPiece != null && enemyPiece.getTeamColor() != teamColor){
                     Collection<ChessMove> threateningMoves = enemyPiece.pieceMoves(board, enemyPosition);
                     for(ChessMove move : threateningMoves){
-                        if(move.getEndPosition() == kingPosition){
+                        if(move.getEndPosition().equals(kingPosition)){
                             return true;
                         }
                     }
@@ -93,7 +109,7 @@ public class ChessGame {
             for(int j = 1; j <= 8; j++){
                 ChessPosition currentPosition = new ChessPosition(i, j);
                 ChessPiece currentPiece = board.getPiece(currentPosition);
-                if(currentPiece.getPieceType() == ChessPiece.PieceType.KING && currentPiece.getTeamColor() == color){
+                if(currentPiece != null && currentPiece.getPieceType() == ChessPiece.PieceType.KING && currentPiece.getTeamColor() == color){
                     return currentPosition;
                 }
             }
@@ -138,5 +154,18 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return currentTurn == chessGame.currentTurn && Objects.equals(board, chessGame.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentTurn, board);
     }
 }
