@@ -129,12 +129,17 @@ public class ChessGame {
                 ChessPiece enemyPiece = board.getPiece(enemyPosition);
                 if(enemyPiece != null && enemyPiece.getTeamColor() != teamColor){
                     Collection<ChessMove> threateningMoves = enemyPiece.pieceMoves(board, enemyPosition);
-                    for(ChessMove move : threateningMoves){
-                        if(move.getEndPosition().equals(kingPosition)){
-                            return true;
-                        }
-                    }
+                    if (threatensKing(threateningMoves, kingPosition)) return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private static boolean threatensKing(Collection<ChessMove> threateningMoves, ChessPosition kingPosition) {
+        for(ChessMove move : threateningMoves){
+            if(move.getEndPosition().equals(kingPosition)){
+                return true;
             }
         }
         return false;
@@ -170,19 +175,26 @@ public class ChessGame {
                 ChessPiece piece = board.getPiece(parsePosition);
                 if(piece != null && piece.getTeamColor() == teamColor){
                     validMoves.addAll(validMoves(parsePosition));
-                    for(ChessMove move : validMoves){
-                        board.addPiece(move.getEndPosition(), piece);
-                        board.addPiece(move.getStartPosition(), null);
-                        if(!isInCheck(teamColor)){
-                            return false;
-                        }
-                        board.addPiece(move.getEndPosition(), null);
-                        board.addPiece(move.getStartPosition(), piece);
+                    if (canResolveCheck(teamColor, validMoves, piece)){
+                        return false;
                     }
                 }
             }
         }
         return true;
+    }
+
+    private boolean canResolveCheck(TeamColor teamColor, Collection<ChessMove> validMoves, ChessPiece piece) {
+        for(ChessMove move : validMoves){
+            board.addPiece(move.getEndPosition(), piece);
+            board.addPiece(move.getStartPosition(), null);
+            if(!isInCheck(teamColor)){
+                return true;
+            }
+            board.addPiece(move.getEndPosition(), null);
+            board.addPiece(move.getStartPosition(), piece);
+        }
+        return false;
     }
 
     /**
@@ -194,22 +206,21 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         Collection<ChessMove> availableMoves = new ArrayList<>();
-        if(!isInCheck(teamColor)){
-            for(int i = 1; i <= 8; i++){
-                for(int j = 1; j <= 8; j++){
-                    ChessPosition parsePosition = new ChessPosition(i, j);
-                    ChessPiece piece = board.getPiece(parsePosition);
-                    if(piece != null && piece.getTeamColor() == teamColor){
-                        availableMoves.addAll(validMoves(new ChessPosition(i, j)));
-                        if(!availableMoves.isEmpty()) {
-                            return false;
-                        }
+        if(isInCheck(teamColor)){
+            return false;
+        }
+
+        for(int i = 1; i <= 8; i++){
+            for(int j = 1; j <= 8; j++){
+                ChessPosition parsePosition = new ChessPosition(i, j);
+                ChessPiece piece = board.getPiece(parsePosition);
+                if(piece != null && piece.getTeamColor() == teamColor){
+                    availableMoves.addAll(validMoves(new ChessPosition(i, j)));
+                    if(!availableMoves.isEmpty()) {
+                        return false;
                     }
                 }
             }
-        }
-        else{
-            return false;
         }
         return true;
     }
