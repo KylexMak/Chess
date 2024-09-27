@@ -160,7 +160,6 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        ChessPosition kingPosition = FindKing(board, teamColor);
         Collection<ChessMove> validMoves = new ArrayList<>();
         if(!isInCheck(teamColor)){
             return false;
@@ -235,8 +234,12 @@ public class ChessGame {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
         ChessGame chessGame = (ChessGame) o;
         return currentTurn == chessGame.currentTurn && Objects.equals(board, chessGame.board);
     }
