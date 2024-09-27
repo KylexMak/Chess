@@ -129,7 +129,9 @@ public class ChessGame {
                 ChessPiece enemyPiece = board.getPiece(enemyPosition);
                 if(enemyPiece != null && enemyPiece.getTeamColor() != teamColor){
                     Collection<ChessMove> threateningMoves = enemyPiece.pieceMoves(board, enemyPosition);
-                    if (threatensKing(threateningMoves, kingPosition)) return true;
+                    if (threatensKing(threateningMoves, kingPosition)){
+                        return true;
+                    }
                 }
             }
         }
