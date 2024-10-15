@@ -21,6 +21,15 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
+    public List<Integer> getAllGameIds(){
+        List<Integer> gameIds = new ArrayList<>();
+        for(Map.Entry<Integer, GameData> entry: allGames.entrySet()){
+            gameIds.add(entry.getKey());
+        }
+        return gameIds;
+    }
+
+    @Override
     public List<GameData> listGames() throws DataAccessException {
         List<GameData> games = new ArrayList<>();
         for(Map.Entry<Integer, GameData> entry: allGames.entrySet()){

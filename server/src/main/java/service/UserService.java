@@ -4,13 +4,12 @@ import dataaccess.*;
 import model.AuthData;
 import model.UserData;
 
-import javax.xml.crypto.Data;
 import java.util.UUID;
 
 public class UserService {
     AuthDao authDb = new MemoryAuthDAO();
     UserDAO userDb = new MemoryUserDAO();
-    GameDAO gameDb = new MemoryGameDAO();
+    AuthService authService = new AuthService();
 
     public AuthData register(UserData user) throws DataAccessException{
         if(userDb.getUser(user.username()) == null){
@@ -32,10 +31,7 @@ public class UserService {
         if(userDb.getUser(user.username()) != null){
             UserData assumedUser = userDb.getUser(user.username());
             if(assumedUser.password().equals(user.password())){
-                String authToken = UUID.randomUUID().toString();
-                AuthData auth = new AuthData(authToken, user.username());
-                authDb.createAuthData(auth);
-                return auth;
+                return authService.createAuthData(user.username());
             }
             else{
                 throw new DataAccessException("Error: unauthorized");
@@ -53,5 +49,13 @@ public class UserService {
         else{
             authDb.deleteAuthData(authToken);
         }
+    }
+
+    public void deleteUser(String username) throws DataAccessException{
+        userDb.deleteUser(username);
+    }
+
+    public void clearUsers() throws DataAccessException{
+        userDb.clearUsers();
     }
 }
