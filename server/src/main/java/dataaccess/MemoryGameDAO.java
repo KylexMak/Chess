@@ -10,7 +10,7 @@ import java.util.Map;
 public class MemoryGameDAO implements GameDAO{
     public static HashMap<Integer, GameData> allGames = new HashMap<>();
     @Override
-    public void createGame(GameData game) throws DataAccessException {
+    public void createGame(GameData game){
         int gameID = game.gameID();
         allGames.put(gameID, game);
     }
@@ -35,7 +35,7 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public List<GameData> listGames() throws DataAccessException {
+    public List<GameData> listGames(){
         List<GameData> games = new ArrayList<>();
         for(Map.Entry<Integer, GameData> entry: allGames.entrySet()){
             games.add(entry.getValue());
@@ -64,7 +64,7 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void clearGames() throws DataAccessException {
+    public void clearGames(){
         allGames.clear();
     }
 }
