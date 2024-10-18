@@ -4,8 +4,8 @@ import model.AuthData;
 import org.eclipse.jetty.client.HttpResponseException;
 
 public interface AuthDao {
-    public void createAuthData(AuthData authData) throws DataAccessException;
-    public AuthData getAuthData(String authToken) throws DataAccessException;
-    public void deleteAuthData(String authToken) throws DataAccessException;
-    public void clearAllAuthData() throws DataAccessException;
+    void createAuthData(AuthData authData) throws DataAccessException;
+    AuthData getAuthData(String authToken) throws DataAccessException;
+    void deleteAuthData(String authToken) throws DataAccessException;
+    void clearAllAuthData() throws DataAccessException;
 }

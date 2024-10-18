@@ -4,10 +4,7 @@ import dataaccess.*;
 import model.AuthData;
 import model.UserData;
 
-import java.util.UUID;
-
 public class UserService {
-    AuthDao authDb = new MemoryAuthDAO();
     UserDAO userDb = new MemoryUserDAO();
     AuthService authService = new AuthService();
 
@@ -16,15 +13,14 @@ public class UserService {
             if(user.username() == null || user.password() == null || user.email() == null){
                 throw new DataAccessException("Error: bad request");
             }
+            else{
+                userDb.addUser(user);
+            }
         }
         else{
-            userDb.addUser(user);
+            throw new DataAccessException("Error: This user already exists");
         }
-
-        String authToken = UUID.randomUUID().toString();
-        AuthData auth = new AuthData(authToken, user.username());
-        authDb.createAuthData(auth);
-        return auth;
+        return authService.createAuthData(user.username());
     }
 
     public AuthData login(UserData user) throws DataAccessException{
@@ -43,11 +39,11 @@ public class UserService {
     }
 
     public void logout(String authToken) throws DataAccessException {
-        if(authDb.getAuthData(authToken) == null){
-            throw new DataAccessException("Error: unauthroized");
+        if(authService.getAuthData(authToken) == null){
+            throw new DataAccessException("Error: unauthorized");
         }
         else{
-            authDb.deleteAuthData(authToken);
+            authService.deleteAuthData(authToken);
         }
     }
 
