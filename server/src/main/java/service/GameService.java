@@ -67,6 +67,9 @@ public class GameService {
                 throw new DataAccessException("Error: already taken");
             }
         }
+        else{
+            throw new DataAccessException("Error: unauthorized");
+        }
     }
 
     public void deleteGame(int gameId) throws DataAccessException{

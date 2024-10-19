@@ -20,8 +20,17 @@ public class JoinGameHandler implements Route {
             return "";
         }
         catch(DataAccessException dataAccessException){
-
+            String errorMessage = dataAccessException.toString();
+            if(errorMessage.contains("already taken")){
+                response.status(403);
+            }
+            if(errorMessage.contains("no user") || errorMessage.contains("gameId")){
+                response.status(500);
+            }
+            if(errorMessage.contains("unauthorized")){
+                response.status(401);
+            }
+            return serializer.toJson(errorMessage);
         }
-        return null;
     }
 }

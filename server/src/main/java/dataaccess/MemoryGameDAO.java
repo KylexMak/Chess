@@ -21,7 +21,7 @@ public class MemoryGameDAO implements GameDAO{
             return allGames.get(gameID);
         }
         else{
-            throw new DataAccessException("Error: Game does not exist");
+            throw new DataAccessException("Error: Game does not exist with gameId: " + gameID);
         }
     }
 
