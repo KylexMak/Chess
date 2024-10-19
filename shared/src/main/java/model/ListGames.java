@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public record ListGames(List<GameData> games) {
     private List<String> convert(List<GameData> games){
@@ -14,7 +15,7 @@ public record ListGames(List<GameData> games) {
             gamesAsString.add("White Username: ");
             gamesAsString.add(game.whiteUsername() + " | ");
             gamesAsString.add("Black Username: ");
-            gamesAsString.add(game.blackUsername() + " | ");
+            gamesAsString.add(game.blackUsername() + "\n");
         }
         return gamesAsString;
     }
@@ -24,8 +25,21 @@ public record ListGames(List<GameData> games) {
         List<String> gamesList = convert(games);
         String flattened = "";
         for(String gameData : gamesList){
-            flattened += gameData;
+            flattened = flattened + gameData;
         }
         return flattened;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListGames listGames = (ListGames) o;
+        return Objects.equals(games, listGames.games);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(games);
     }
 }

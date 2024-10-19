@@ -26,7 +26,7 @@ public class UserServiceTests {
     @Test
     public void register() throws DataAccessException{
         AuthData newUser = userService.register(new UserData("tacoTime", "password", "tacoTime@gmail.com"));
-        Assertions.assertEquals(newUser.userName(), userService.getByUsername(newUser.userName()).username());
+        Assertions.assertEquals(newUser.username(), userService.getByUsername(newUser.username()).username());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class UserServiceTests {
     public void login() throws DataAccessException{
         UserData user = userService.getByUsername("test");
         AuthData loggedIn = userService.login(user);
-        Assertions.assertEquals(loggedIn.userName(), user.username());
+        Assertions.assertEquals(loggedIn.username(), user.username());
     }
 
     @Test

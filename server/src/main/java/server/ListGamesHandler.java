@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import model.ErrorMessage;
 import model.GameData;
 import model.ListGames;
 import service.GameService;
@@ -13,6 +14,11 @@ import java.util.List;
 
 public class ListGamesHandler implements Route {
     GameService gameService = new GameService();
+
+    public ListGamesHandler(){
+
+    }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson serializer = new Gson();
@@ -22,11 +28,12 @@ public class ListGamesHandler implements Route {
             return serializer.toJson(games);
         }
         catch (DataAccessException dataAccessException){
-            String errorMessage = dataAccessException.toString();
+            String errorMessage = dataAccessException.getMessage();
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
             }
-            return serializer.toJson(errorMessage);
+            ErrorMessage message = new ErrorMessage(errorMessage);
+            return serializer.toJson(message);
         }
     }
 }

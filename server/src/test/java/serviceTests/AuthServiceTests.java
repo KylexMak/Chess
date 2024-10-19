@@ -29,8 +29,7 @@ public class AuthServiceTests {
     public void deleteAuthData() throws DataAccessException {
         AuthData auth = authService.createAuthData("newTestUserName");
         authService.deleteAuthData(auth.authToken());
-        DataAccessException error = Assertions.assertThrows(DataAccessException.class, () -> authService.getAuthData(auth.authToken()));
-        Assertions.assertEquals("Error: There is no user with authToken: " + auth.authToken(), error.getMessage());
+        Assertions.assertNull(authService.getAuthData(auth.authToken()));
     }
 
     @Test

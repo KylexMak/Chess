@@ -2,17 +2,17 @@ package model;
 
 import java.util.Objects;
 
-public record JoinGameRequest(String playerColor, int gameID) {
+public record GameId(Integer gameID) {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JoinGameRequest that = (JoinGameRequest) o;
-        return gameID == that.gameID && Objects.equals(playerColor, that.playerColor);
+        GameId gameId1 = (GameId) o;
+        return Objects.equals(gameID, gameId1.gameID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerColor, gameID);
+        return Objects.hashCode(gameID);
     }
 }

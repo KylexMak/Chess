@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import model.ErrorMessage;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -9,6 +10,11 @@ import spark.Route;
 
 public class LogoutHandler implements Route {
     UserService userService = new UserService();
+
+    public LogoutHandler(){
+
+    }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson serializer = new Gson();
@@ -18,11 +24,12 @@ public class LogoutHandler implements Route {
             return "";
         }
         catch(DataAccessException exception){
-            String errorMessage = exception.toString();
+            String errorMessage = exception.getMessage();
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
             }
-            return serializer.toJson(errorMessage);
+            ErrorMessage message = new ErrorMessage(errorMessage);
+            return serializer.toJson(message);
         }
     }
 }

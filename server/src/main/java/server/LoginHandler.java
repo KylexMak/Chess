@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.AuthData;
+import model.ErrorMessage;
 import model.Login;
 import model.UserData;
 import service.UserService;
@@ -13,20 +14,23 @@ import spark.Route;
 public class LoginHandler implements Route {
     UserService userService = new UserService();
 
+    public LoginHandler(){
+
+    }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson serializer = new Gson();
-        Login user = serializer.fromJson(request.body(), Login.class);
-        UserData conversion = new UserData(user.username(), user.password(), null);
+        UserData user = serializer.fromJson(request.body(), UserData.class);
         try{
-            AuthData userLoggedIn = userService.login(conversion);
+            AuthData userLoggedIn = userService.login(user);
             return serializer.toJson(userLoggedIn);
         }
         catch(DataAccessException exception){
-            String errorMessage = exception.toString();
-            if(errorMessage.contains("unauthorized")){
+            if(exception.getMessage().contains("unauthorized")){
                 response.status(401);
             }
+            ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
             return serializer.toJson(errorMessage);
         }
 

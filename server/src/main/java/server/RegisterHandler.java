@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.AuthData;
+import model.ErrorMessage;
 import model.UserData;
 import service.UserService;
 import spark.Request;
@@ -11,6 +12,10 @@ import spark.Route;
 
 public class RegisterHandler implements Route {
     UserService userService = new UserService();
+
+    public RegisterHandler(){
+
+    }
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
@@ -21,14 +26,15 @@ public class RegisterHandler implements Route {
             return serializer.toJson(registered);
         }
         catch (DataAccessException exception){
-            String errorMessage = exception.toString();
+            String errorMessage = exception.getMessage();
             if(errorMessage.contains("already taken")){
                 response.status(403);
             }
             if(errorMessage.contains("bad request")){
                 response.status(400);
             }
-            return serializer.toJson(errorMessage);
+            ErrorMessage message = new ErrorMessage(errorMessage);
+            return serializer.toJson(message);
         }
     }
 }

@@ -2,10 +2,7 @@ package serviceTests;
 
 import chess.ChessGame;
 import dataaccess.DataAccessException;
-import model.AuthData;
-import model.GameData;
-import model.ListGames;
-import model.UserData;
+import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import service.GameService;
 import service.UserService;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class GameServiceTests {
@@ -36,10 +32,10 @@ public class GameServiceTests {
     public void createGame() throws DataAccessException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
-        int gameId = gameService.createGame(userLogin.authToken(), "firstGame");
-        GameData retrieveGame = gameService.getGame(gameId);
-        Assertions.assertNotNull(gameService.getGame(gameId));
-        Assertions.assertEquals(gameId, retrieveGame.gameID());
+        GameId gameId = gameService.createGame(userLogin.authToken(), "firstGame");
+        GameData retrieveGame = gameService.getGame(gameId.gameID());
+        Assertions.assertNotNull(gameService.getGame(gameId.gameID()));
+        Assertions.assertEquals(gameId.gameID(), retrieveGame.gameID());
     }
 
     @Test
@@ -63,9 +59,9 @@ public class GameServiceTests {
     public void get() throws DataAccessException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
-        int gameId = gameService.createGame(userLogin.authToken(), "Test3");
-        GameData game = gameService.getGame(gameId);
-        GameData newGame = new GameData(gameId, null, null, "Test3", new ChessGame());
+        GameId gameId = gameService.createGame(userLogin.authToken(), "Test3");
+        GameData game = gameService.getGame(gameId.gameID());
+        GameData newGame = new GameData(gameId.gameID(), null, null, "Test3", new ChessGame());
         Assertions.assertEquals(game, newGame);
     }
 
@@ -79,9 +75,9 @@ public class GameServiceTests {
     public void joinGame() throws DataAccessException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
-        int gameId = gameService.createGame(userLogin.authToken(), "Test3");
-        gameService.joinGame(gameId, userLogin.authToken(), "WHITE");
-        GameData retrieveGame = gameService.getGame(gameId);
+        GameId gameId = gameService.createGame(userLogin.authToken(), "Test3");
+        gameService.joinGame(gameId.gameID(), userLogin.authToken(), "WHITE");
+        GameData retrieveGame = gameService.getGame(gameId.gameID());
         Assertions.assertNotNull(retrieveGame.whiteUsername());
     }
 
@@ -89,8 +85,8 @@ public class GameServiceTests {
     public void joinGameInvalidAuth() throws DataAccessException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
-        int gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId, "invalidToken", "BLACK"));
+        GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId.gameID(), "invalidToken", "BLACK"));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
     }
 
@@ -99,9 +95,9 @@ public class GameServiceTests {
         UserData user = userService.getByUsername("test");
         AuthData newUser = userService.register(new UserData("taco", "password", "taco@taco.com"));
         AuthData userLogin = userService.login(user);
-        int gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        gameService.joinGame(gameId, newUser.authToken(), "WHITE");
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId, userLogin.authToken(),"WHITE"));
+        GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
+        gameService.joinGame(gameId.gameID(), newUser.authToken(), "WHITE");
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId.gameID(), userLogin.authToken(),"WHITE"));
         Assertions.assertEquals("Error: already taken", exception.getMessage());
     }
 
@@ -111,9 +107,9 @@ public class GameServiceTests {
         AuthData newUser = userService.register(new UserData("taco", "password", "taco@taco.com"));
         AuthData userLogin = userService.login(user);
         gameService.clearGames();
-        int gameId = gameService.createGame(userLogin.authToken(), "Test4");
+        GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
         List<GameData> original = new ArrayList<>();
-        original.add(gameService.getGame(gameId));
+        original.add(gameService.getGame(gameId.gameID()));
         ListGames origin = new ListGames(original);
         ListGames get = gameService.listGames(userLogin.authToken());
         Assertions.assertEquals(origin, get);

@@ -8,6 +8,10 @@ public class UserService {
     UserDAO userDb = new MemoryUserDAO();
     AuthService authService = new AuthService();
 
+    public UserService(){
+
+    }
+
     public AuthData register(UserData user) throws DataAccessException{
         if(userDb.getUser(user.username()) == null){
             if(user.username() == null || user.password() == null || user.email() == null){

@@ -8,6 +8,10 @@ import java.util.UUID;
 public class AuthService {
     AuthDao authDb = new MemoryAuthDAO();
 
+    public AuthService(){
+
+    }
+
     public AuthData createAuthData(String username){
         String authToken = UUID.randomUUID().toString();
         AuthData toCreate = new AuthData(authToken, username);

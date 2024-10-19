@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import model.ErrorMessage;
 import model.JoinGameRequest;
 import service.GameService;
 import spark.Request;
@@ -10,6 +11,11 @@ import spark.Route;
 
 public class JoinGameHandler implements Route {
     GameService gameService = new GameService();
+
+    public JoinGameHandler(){
+
+    }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson serializer = new Gson();
@@ -20,7 +26,7 @@ public class JoinGameHandler implements Route {
             return "";
         }
         catch(DataAccessException dataAccessException){
-            String errorMessage = dataAccessException.toString();
+            String errorMessage = dataAccessException.getMessage();
             if(errorMessage.contains("bad request")){
                 response.status(400);
             }
@@ -33,7 +39,8 @@ public class JoinGameHandler implements Route {
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
             }
-            return serializer.toJson(errorMessage);
+            ErrorMessage message = new ErrorMessage(errorMessage);
+            return serializer.toJson(message);
         }
     }
 }
