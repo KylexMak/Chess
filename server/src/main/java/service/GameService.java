@@ -6,6 +6,7 @@ import dataaccess.GameDAO;
 import dataaccess.MemoryGameDAO;
 import model.AuthData;
 import model.GameData;
+import model.ListGames;
 
 import java.util.Random;
 
@@ -34,12 +35,12 @@ public class GameService {
         return gameDb.getGame(gameId);
     }
 
-    public List<GameData> listGames(String authToken) throws DataAccessException{
+    public ListGames listGames(String authToken) throws DataAccessException{
         if(authService.getAuthData(authToken) == null){
             throw new DataAccessException("Error: unauthorized");
         }
         else{
-            return gameDb.listGames();
+            return new ListGames(gameDb.listGames());
         }
     }
 
