@@ -86,7 +86,8 @@ public class GameServiceTests {
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId.gameID(), "invalidToken", "BLACK"));
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
+                () -> gameService.joinGame(gameId.gameID(), "invalidToken", "BLACK"));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
     }
 
@@ -97,7 +98,8 @@ public class GameServiceTests {
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
         gameService.joinGame(gameId.gameID(), newUser.authToken(), "WHITE");
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.joinGame(gameId.gameID(), userLogin.authToken(),"WHITE"));
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
+                () -> gameService.joinGame(gameId.gameID(), userLogin.authToken(),"WHITE"));
         Assertions.assertEquals("Error: already taken", exception.getMessage());
     }
 

@@ -18,7 +18,7 @@ public class GameService {
     AuthService authService = new AuthService();
     Random rand = new Random();
 
-    private static final int gameIdLimit = 1000000;
+    private static final int GAME_ID_LIMIT = 1000000;
 
     public GameService(){
 
@@ -72,7 +72,8 @@ public class GameService {
             }
             else {
                 if(playerColor.equals("WHITE")) {
-                    GameData updatedGame = new GameData(gameId, authData.username(), gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
+                    GameData updatedGame = new GameData(gameId, authData.username(),
+                            gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
                     updateGame(updatedGame);
                 }
             }
@@ -81,7 +82,8 @@ public class GameService {
             }
             else{
                 if(playerColor.equals("BLACK")){
-                    GameData updatedGame = new GameData(gameId, gameToJoin.whiteUsername(), authData.username(), gameToJoin.gameName(), gameToJoin.game());
+                    GameData updatedGame = new GameData(gameId, gameToJoin.whiteUsername(),
+                            authData.username(), gameToJoin.gameName(), gameToJoin.game());
                     updateGame(updatedGame);
                 }
             }
@@ -97,10 +99,10 @@ public class GameService {
 
     private GameId generateGameId(){
         List<Integer> existingGameIds = gameDb.getAllGameIds();
-        int gameId = rand.nextInt(gameIdLimit);
+        int gameId = rand.nextInt(GAME_ID_LIMIT);
         GameId game = new GameId(gameId);
         while(existingGameIds.contains(gameId)){
-            gameId = rand.nextInt(gameIdLimit);
+            gameId = rand.nextInt(GAME_ID_LIMIT);
             game = new GameId(gameId);
         }
         return game;

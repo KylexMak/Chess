@@ -31,13 +31,15 @@ public class UserServiceTests {
 
     @Test
     public void alreadyRegistered(){
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> userService.register(new UserData("test", "testPass", "test@email.com")));
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
+                () -> userService.register(new UserData("test", "testPass", "test@email.com")));
         Assertions.assertEquals("Error: already taken", exception.getMessage());
     }
 
     @Test
     public void userDataInvalid(){
-        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> userService.register(new UserData(null, "ague", "something@something")));
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
+                () -> userService.register(new UserData(null, "ague", "something@something")));
         Assertions.assertEquals("Error: bad request", exception.getMessage());
     }
 

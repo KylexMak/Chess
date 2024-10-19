@@ -30,16 +30,4 @@ public record ListGames(List<GameData> games) {
         return flattened;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ListGames listGames = (ListGames) o;
-        return Objects.equals(games, listGames.games);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(games);
-    }
 }
