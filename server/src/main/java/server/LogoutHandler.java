@@ -2,7 +2,6 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
-import org.eclipse.jetty.server.Authentication;
 import service.UserService;
 import spark.Request;
 import spark.Response;
