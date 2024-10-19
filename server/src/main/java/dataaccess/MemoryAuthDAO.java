@@ -13,12 +13,8 @@ public class MemoryAuthDAO implements AuthDao {
     }
 
     @Override
-    public AuthData getAuthData(String authToken) throws DataAccessException {
-        AuthData authData = allAuthData.get(authToken);
-        if(authData == null){
-            throw new DataAccessException("Error: There is no user with authToken: " + authToken);
-        }
-        return authData;
+    public AuthData getAuthData(String authToken){
+        return allAuthData.get(authToken);
     }
 
     @Override

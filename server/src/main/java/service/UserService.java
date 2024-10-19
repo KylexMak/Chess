@@ -15,12 +15,12 @@ public class UserService {
             }
             else{
                 userDb.addUser(user);
+                return authService.createAuthData(user.username());
             }
         }
         else{
-            throw new DataAccessException("Error: This user already exists");
+            throw new DataAccessException("Error: already taken");
         }
-        return authService.createAuthData(user.username());
     }
 
     public AuthData login(UserData user) throws DataAccessException{
@@ -47,8 +47,8 @@ public class UserService {
         }
     }
 
-    public void deleteUser(String username) throws DataAccessException{
-        userDb.deleteUser(username);
+    public UserData getByUsername(String userName){
+        return userDb.getUser(userName);
     }
 
     public void clearUsers(){

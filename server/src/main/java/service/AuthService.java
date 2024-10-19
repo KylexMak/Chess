@@ -15,7 +15,7 @@ public class AuthService {
         return toCreate;
     }
 
-    public AuthData getAuthData(String authToken) throws DataAccessException{
+    public AuthData getAuthData(String authToken){
         return authDb.getAuthData(authToken);
     }
 

@@ -1,7 +1,6 @@
 package serviceTests;
 
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
 import model.AuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.AuthService;
 
-import javax.xml.crypto.Data;
-
 public class AuthServiceTests {
-    private AuthService authService = new AuthService();
+    private final AuthService authService = new AuthService();
     @BeforeEach
     public void mockAuthDB(){
         authService.createAuthData("testUserName");
