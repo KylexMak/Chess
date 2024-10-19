@@ -23,9 +23,6 @@ public class ListGamesHandler implements Route {
         }
         catch (DataAccessException dataAccessException){
             String errorMessage = dataAccessException.toString();
-            if(errorMessage.contains("no user")){
-                response.status(500);
-            }
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
             }

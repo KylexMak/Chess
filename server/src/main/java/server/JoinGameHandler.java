@@ -21,10 +21,13 @@ public class JoinGameHandler implements Route {
         }
         catch(DataAccessException dataAccessException){
             String errorMessage = dataAccessException.toString();
+            if(errorMessage.contains("bad request")){
+                response.status(400);
+            }
             if(errorMessage.contains("already taken")){
                 response.status(403);
             }
-            if(errorMessage.contains("no user") || errorMessage.contains("gameId")){
+            if(errorMessage.contains("full")){
                 response.status(500);
             }
             if(errorMessage.contains("unauthorized")){

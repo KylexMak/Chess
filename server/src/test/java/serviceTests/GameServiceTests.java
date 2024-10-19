@@ -120,8 +120,15 @@ public class GameServiceTests {
     }
 
     @Test
-    public void listGamesInvalidAuth() throws DataAccessException{
+    public void listGamesInvalidAuth(){
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.listGames("InvalidToken"));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
+    }
+
+    @Test
+    public void updateGameNoGame() throws DataAccessException{
+        GameData fakeGame = new GameData(1, null, null, "poke", new ChessGame());
+        DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> gameService.updateGame(fakeGame));
+        Assertions.assertEquals("Error: bad request", exception.getMessage());
     }
 }

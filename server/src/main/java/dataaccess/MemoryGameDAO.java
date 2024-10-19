@@ -44,7 +44,7 @@ public class MemoryGameDAO implements GameDAO{
             allGames.put(game.gameID(), game);
         }
         else{
-            throw new DataAccessException("Error: Game does not exist");
+            throw new DataAccessException("Error: bad request");
         }
     }
 
