@@ -1,4 +1,4 @@
-package services;
+package service;
 
 import dataaccess.DataAccessException;
 import model.AuthData;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.AuthService;
 
 public class AuthServiceTests {
     private final AuthService authService = new AuthService();

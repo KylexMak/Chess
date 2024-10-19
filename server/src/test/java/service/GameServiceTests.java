@@ -1,4 +1,4 @@
-package services;
+package service;
 
 import chess.ChessGame;
 import dataaccess.DataAccessException;
@@ -7,8 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.GameService;
-import service.UserService;
 
 import java.util.*;
 
