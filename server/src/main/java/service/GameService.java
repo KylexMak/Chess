@@ -14,7 +14,6 @@ import java.util.List;
 public class GameService {
     GameDAO gameDb = new MemoryGameDAO();
     AuthService authService = new AuthService();
-    UserService userService = new UserService();
     Random rand = new Random();
 
     private static final int gameIdLimit = 1000000;
@@ -27,7 +26,7 @@ public class GameService {
             return gameId;
         }
         else{
-            throw new DataAccessException("Error: Unauthorized");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
@@ -37,7 +36,7 @@ public class GameService {
 
     public List<GameData> listGames(String authToken) throws DataAccessException{
         if(authService.getAuthData(authToken) == null){
-            throw new DataAccessException("Error: Unauthorized");
+            throw new DataAccessException("Error: unauthorized");
         }
         else{
             return gameDb.listGames();
@@ -59,13 +58,13 @@ public class GameService {
                 updateGame(updatedGame.gameID(), updatedGame.game());
             }
             else{
-                throw new DataAccessException("Error: White is taken");
+                throw new DataAccessException("Error: already taken");
             }
             if(playerColor.equals("BLACK") && gameToJoin.blackUsername() == null){
                 GameData updatedGame = new GameData(gameId, gameToJoin.whiteUsername(), authData.userName(), gameToJoin.gameName(), gameToJoin.game());
                 updateGame(updatedGame.gameID(), updatedGame.game());
             }else{
-                throw new DataAccessException("Error: Black is taken");
+                throw new DataAccessException("Error: already taken");
             }
         }
     }
@@ -74,7 +73,7 @@ public class GameService {
         gameDb.deleteGame(gameId);
     }
 
-    public void clearGames() throws DataAccessException{
+    public void clearGames(){
         gameDb.clearGames();
     }
 

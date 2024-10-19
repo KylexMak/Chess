@@ -1,6 +1,5 @@
 package server;
 
-import org.eclipse.jetty.server.Authentication;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -17,6 +16,6 @@ public class ClearHandler implements Route {
         gameService.clearGames();
         authService.clearAllAuthData();
         userService.clearUsers();
-        return null;
+        return "";
     }
 }

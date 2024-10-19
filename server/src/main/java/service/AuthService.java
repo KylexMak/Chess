@@ -8,7 +8,7 @@ import java.util.UUID;
 public class AuthService {
     AuthDao authDb = new MemoryAuthDAO();
 
-    public AuthData createAuthData(String username) throws DataAccessException {
+    public AuthData createAuthData(String username){
         String authToken = UUID.randomUUID().toString();
         AuthData toCreate = new AuthData(authToken, username);
         authDb.createAuthData(toCreate);
@@ -23,7 +23,7 @@ public class AuthService {
         authDb.deleteAuthData(authToken);
     }
 
-    public void clearAllAuthData() throws DataAccessException{
+    public void clearAllAuthData() {
         authDb.clearAllAuthData();
     }
 }

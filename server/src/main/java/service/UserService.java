@@ -51,7 +51,7 @@ public class UserService {
         userDb.deleteUser(username);
     }
 
-    public void clearUsers() throws DataAccessException{
+    public void clearUsers(){
         userDb.clearUsers();
     }
 }
