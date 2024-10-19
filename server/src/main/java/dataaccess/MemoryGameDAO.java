@@ -16,13 +16,8 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public GameData getGame(int gameID) throws DataAccessException {
-        if(allGames.containsKey(gameID)){
-            return allGames.get(gameID);
-        }
-        else{
-            throw new DataAccessException("Error: Game does not exist with gameId: " + gameID);
-        }
+    public GameData getGame(int gameID){
+        return allGames.get(gameID);
     }
 
     @Override
@@ -44,9 +39,9 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateGame(int gameID, GameData game) throws DataAccessException {
-        if(allGames.containsKey(gameID)){
-            allGames.put(gameID, game);
+    public void updateGame(GameData game) throws DataAccessException {
+        if(allGames.containsKey(game.gameID())){
+            allGames.put(game.gameID(), game);
         }
         else{
             throw new DataAccessException("Error: Game does not exist");
