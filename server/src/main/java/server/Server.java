@@ -7,15 +7,29 @@ import model.ListGames;
 import spark.*;
 
 public class Server {
-    ClearHandler clear = new ClearHandler();
-    RegisterHandler register = new RegisterHandler();
-    LoginHandler login = new LoginHandler();
-    LogoutHandler logout = new LogoutHandler();
-    ListGamesHandler list = new ListGamesHandler();
-    CreateGameHandler create = new CreateGameHandler();
-    JoinGameHandler join = new JoinGameHandler();
+    ClearHandler clear;
+    RegisterHandler register;
+    LoginHandler login;
+    LogoutHandler logout;
+    ListGamesHandler list;
+    CreateGameHandler create;
+    JoinGameHandler join;
+    {
+        try{
+            clear = new ClearHandler();
+            register = new RegisterHandler();
+            login = new LoginHandler();
+            logout = new LogoutHandler();
+            list = new ListGamesHandler();
+            create = new CreateGameHandler();
+            join = new JoinGameHandler();
+        }
+        catch (ResponseException | DataAccessException e){
+            throw new RuntimeException(e);
+        }
+    }
 
-    public Server() throws ResponseException, DataAccessException {
+    public Server(){
     }
 
     public int run(int desiredPort) {

@@ -4,6 +4,7 @@ import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.MemoryGameDAO;
+import dataaccess.SQLGameDAO;
 import exception.ResponseException;
 import model.AuthData;
 import model.GameData;
@@ -15,7 +16,7 @@ import java.util.Random;
 import java.util.List;
 
 public class GameService {
-    GameDAO gameDb = new MemoryGameDAO();
+    GameDAO gameDb = new SQLGameDAO();
     AuthService authService = new AuthService();
     Random rand = new Random();
 
@@ -41,7 +42,7 @@ public class GameService {
         }
     }
 
-    public GameData getGame(int gameId){
+    public GameData getGame(int gameId) throws ResponseException{
         return gameDb.getGame(gameId);
     }
 
@@ -54,7 +55,7 @@ public class GameService {
         }
     }
 
-    public void updateGame(GameData game) throws DataAccessException{
+    public void updateGame(GameData game) throws DataAccessException, ResponseException{
         gameDb.updateGame(game);
     }
 
@@ -94,11 +95,11 @@ public class GameService {
         }
     }
 
-    public void clearGames(){
+    public void clearGames() throws ResponseException{
         gameDb.clearGames();
     }
 
-    private GameId generateGameId(){
+    private GameId generateGameId() throws ResponseException{
         List<Integer> existingGameIds = gameDb.getAllGameIds();
         int gameId = rand.nextInt(GAME_ID_LIMIT);
         GameId game = new GameId(gameId);

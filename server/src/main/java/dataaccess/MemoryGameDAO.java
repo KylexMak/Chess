@@ -1,5 +1,6 @@
 package dataaccess;
 
+import exception.ResponseException;
 import model.GameData;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateGame(GameData game) throws DataAccessException {
+    public void updateGame(GameData game) throws DataAccessException, ResponseException {
         if(allGames.containsKey(game.gameID())){
             allGames.put(game.gameID(), game);
         }

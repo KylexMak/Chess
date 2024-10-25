@@ -4,9 +4,10 @@ import dataaccess.*;
 import exception.ResponseException;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
-    UserDAO userDb = new MemoryUserDAO();
+    UserDAO userDb = new SQLUserDAO();
     AuthService authService = new AuthService();
 
     public UserService() throws ResponseException, DataAccessException {
@@ -29,9 +30,9 @@ public class UserService {
     }
 
     public AuthData login(UserData user) throws DataAccessException, ResponseException{
-        if(userDb.getUser(user.username()) != null){
-            UserData assumedUser = userDb.getUser(user.username());
-            if(assumedUser.password().equals(user.password())){
+        UserData assumedUser = userDb.getUser(user.username());
+        if(assumedUser != null){
+            if(BCrypt.checkpw(user.password(), assumedUser.password())){
                 return authService.createAuthData(user.username());
             }
             else{

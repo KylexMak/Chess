@@ -68,7 +68,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void getNoGame(){
+    public void getNoGame() throws ResponseException{
         GameData game = gameService.getGame(156);
         Assertions.assertNull(game);
     }
