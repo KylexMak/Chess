@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.ErrorMessage;
 import service.UserService;
 import spark.Request;
@@ -11,7 +12,7 @@ import spark.Route;
 public class LogoutHandler implements Route {
     UserService userService = new UserService();
 
-    public LogoutHandler(){
+    public LogoutHandler() throws ResponseException, DataAccessException {
 
     }
 

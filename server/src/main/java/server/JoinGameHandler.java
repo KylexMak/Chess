@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.ErrorMessage;
 import model.JoinGameRequest;
 import service.GameService;
@@ -12,7 +13,7 @@ import spark.Route;
 public class JoinGameHandler implements Route {
     GameService gameService = new GameService();
 
-    public JoinGameHandler(){
+    public JoinGameHandler() throws ResponseException, DataAccessException {
 
     }
 

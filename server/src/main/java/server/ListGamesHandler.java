@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.ErrorMessage;
 import model.GameData;
 import model.ListGames;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ListGamesHandler implements Route {
     GameService gameService = new GameService();
 
-    public ListGamesHandler(){
+    public ListGamesHandler() throws ResponseException, DataAccessException {
 
     }
 

@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.ErrorMessage;
 import model.GameId;
 import model.GameName;
@@ -13,7 +14,7 @@ import spark.Route;
 public class CreateGameHandler implements Route {
     GameService gameService = new GameService();
 
-    public CreateGameHandler(){
+    public CreateGameHandler() throws ResponseException, DataAccessException {
 
     }
 

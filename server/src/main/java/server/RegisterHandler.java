@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.AuthData;
 import model.ErrorMessage;
 import model.UserData;
@@ -13,7 +14,7 @@ import spark.Route;
 public class RegisterHandler implements Route {
     UserService userService = new UserService();
 
-    public RegisterHandler(){
+    public RegisterHandler() throws ResponseException, DataAccessException {
 
     }
 
