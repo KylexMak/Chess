@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.*;
+import exception.ResponseException;
 import model.AuthData;
 import model.UserData;
 
@@ -8,11 +9,11 @@ public class UserService {
     UserDAO userDb = new MemoryUserDAO();
     AuthService authService = new AuthService();
 
-    public UserService(){
+    public UserService() throws ResponseException, DataAccessException {
 
     }
 
-    public AuthData register(UserData user) throws DataAccessException{
+    public AuthData register(UserData user) throws DataAccessException, ResponseException {
         if(userDb.getUser(user.username()) == null){
             if(user.username() == null || user.password() == null || user.email() == null){
                 throw new DataAccessException("Error: bad request");
@@ -27,7 +28,7 @@ public class UserService {
         }
     }
 
-    public AuthData login(UserData user) throws DataAccessException{
+    public AuthData login(UserData user) throws DataAccessException, ResponseException{
         if(userDb.getUser(user.username()) != null){
             UserData assumedUser = userDb.getUser(user.username());
             if(assumedUser.password().equals(user.password())){
@@ -42,7 +43,7 @@ public class UserService {
         }
     }
 
-    public void logout(String authToken) throws DataAccessException {
+    public void logout(String authToken) throws DataAccessException, ResponseException {
         if(authService.getAuthData(authToken) == null){
             throw new DataAccessException("Error: unauthorized");
         }

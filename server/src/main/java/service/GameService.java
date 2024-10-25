@@ -4,6 +4,7 @@ import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.MemoryGameDAO;
+import exception.ResponseException;
 import model.AuthData;
 import model.GameData;
 import model.GameId;
@@ -20,11 +21,11 @@ public class GameService {
 
     private static final int GAME_ID_LIMIT = 1000000;
 
-    public GameService(){
+    public GameService() throws ResponseException, DataAccessException {
 
     }
 
-    public GameId createGame(String authToken, String gameName) throws DataAccessException {
+    public GameId createGame(String authToken, String gameName) throws DataAccessException, ResponseException {
         if (authToken != null && gameName != null) {
             if (authService.getAuthData(authToken) != null) {
                 GameId gameId = generateGameId();
@@ -44,7 +45,7 @@ public class GameService {
         return gameDb.getGame(gameId);
     }
 
-    public ListGames listGames(String authToken) throws DataAccessException{
+    public ListGames listGames(String authToken) throws DataAccessException, ResponseException{
         if(authService.getAuthData(authToken) == null){
             throw new DataAccessException("Error: unauthorized");
         }
@@ -57,7 +58,7 @@ public class GameService {
         gameDb.updateGame(game);
     }
 
-    public void joinGame(int gameId, String authToken, String playerColor) throws DataAccessException{
+    public void joinGame(int gameId, String authToken, String playerColor) throws DataAccessException, ResponseException{
         if(authService.getAuthData(authToken) != null){
             GameData gameToJoin = getGame(gameId);
             AuthData authData = authService.getAuthData(authToken);

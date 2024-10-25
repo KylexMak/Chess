@@ -1,5 +1,7 @@
 package server;
 
+import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.JoinGameRequest;
 import model.ListGames;
 import spark.*;
@@ -12,6 +14,9 @@ public class Server {
     ListGamesHandler list = new ListGamesHandler();
     CreateGameHandler create = new CreateGameHandler();
     JoinGameHandler join = new JoinGameHandler();
+
+    public Server() throws ResponseException, DataAccessException {
+    }
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);

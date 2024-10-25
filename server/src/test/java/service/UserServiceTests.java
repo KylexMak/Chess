@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.DataAccessException;
+import exception.ResponseException;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +12,12 @@ import org.junit.jupiter.api.Test;
 public class UserServiceTests {
     private final UserService userService = new UserService();
     private final AuthService authService = new AuthService();
+
+    public UserServiceTests() throws ResponseException, DataAccessException {
+    }
+
     @BeforeEach
-    public void setUp() throws DataAccessException {
+    public void setUp() throws DataAccessException, ResponseException {
         userService.register(new UserData("test", "testPass", "test@email.com"));
     }
 
@@ -22,7 +27,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void register() throws DataAccessException{
+    public void register() throws DataAccessException, ResponseException{
         AuthData newUser = userService.register(new UserData("tacoTime", "password", "tacoTime@gmail.com"));
         Assertions.assertEquals(newUser.username(), userService.getByUsername(newUser.username()).username());
     }
@@ -42,7 +47,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void login() throws DataAccessException{
+    public void login() throws DataAccessException, ResponseException{
         UserData user = userService.getByUsername("test");
         AuthData loggedIn = userService.login(user);
         Assertions.assertEquals(loggedIn.username(), user.username());
@@ -57,7 +62,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void logout() throws DataAccessException{
+    public void logout() throws DataAccessException, ResponseException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
         userService.logout(userLogin.authToken());
@@ -66,7 +71,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void logoutUnauthorized() throws DataAccessException{
+    public void logoutUnauthorized() throws DataAccessException, ResponseException{
         UserData user = userService.getByUsername("test");
         AuthData userLogin = userService.login(user);
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> userService.logout("invalidToken"));
