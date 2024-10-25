@@ -22,7 +22,7 @@ public class UserServiceTests {
     }
 
     @AfterEach
-    public void cleanUp(){
+    public void cleanUp() throws ResponseException{
         userService.clearUsers();
     }
 
@@ -54,7 +54,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void loginWrongPassword(){
+    public void loginWrongPassword() throws ResponseException{
         UserData user = userService.getByUsername("test");
         UserData wrongPassword = new UserData(user.username(), "fail", user.email());
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> userService.login(wrongPassword));
@@ -79,13 +79,13 @@ public class UserServiceTests {
     }
 
     @Test
-    public void getUser(){
+    public void getUser() throws ResponseException{
         UserData user = new UserData("test", "testPass", "test@email.com");
         Assertions.assertEquals(user, userService.getByUsername(user.username()));
     }
 
     @Test
-    public void getNonexistentUser(){
+    public void getNonexistentUser() throws ResponseException{
         Assertions.assertNull(userService.getByUsername("INoExist"));
     }
 }

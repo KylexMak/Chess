@@ -52,11 +52,11 @@ public class UserService {
         }
     }
 
-    public UserData getByUsername(String userName){
+    public UserData getByUsername(String userName) throws ResponseException{
         return userDb.getUser(userName);
     }
 
-    public void clearUsers(){
+    public void clearUsers() throws ResponseException{
         userDb.clearUsers();
     }
 }

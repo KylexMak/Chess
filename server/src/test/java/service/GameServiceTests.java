@@ -25,7 +25,7 @@ public class GameServiceTests {
     }
 
     @AfterEach
-    public void cleanUp(){
+    public void cleanUp() throws ResponseException{
         userService.clearUsers();
         gameService.clearGames();
     }
