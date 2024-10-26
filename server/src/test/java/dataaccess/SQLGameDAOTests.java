@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SQLGameDAOTests {
     private GameDAO gameDb;
 
@@ -45,5 +49,51 @@ public class SQLGameDAOTests {
         Assertions.assertNull(gameDb.getGame(8));
     }
 
+    @Test
+    public void getAllGameIdsPositive() throws ResponseException{
+        List<Integer> gameIds = gameDb.getAllGameIds();
+        Assertions.assertEquals(gameIds.size(), 3);
+    }
 
+    @Test
+    public void getAllGameIdsNegative() throws ResponseException{
+        List<Integer> gameIds = gameDb.getAllGameIds();
+        gameDb.clearGames();
+        Assertions.assertNotEquals(gameIds, gameDb.getAllGameIds());
+    }
+
+    @Test
+    public void listGamesPositive() throws DataAccessException, ResponseException{
+        List<GameData> games = gameDb.listGames();
+        Assertions.assertEquals(games.size(), 3);
+    }
+
+    @Test
+    public void listGamesNegative() throws DataAccessException, ResponseException{
+        List<GameData> games = gameDb.listGames();
+        gameDb.clearGames();
+        Assertions.assertNotEquals(games, gameDb.listGames());
+    }
+
+    @Test
+    public void updateGamePositive() throws DataAccessException, ResponseException{
+        gameDb.updateGame(new GameData(1, "Random", null, "Random1", new ChessGame()));
+        GameData updatedGame = gameDb.getGame(1);
+        Assertions.assertEquals(updatedGame.whiteUsername(), "Random");
+        Assertions.assertEquals(updatedGame.gameName(), "Random1");
+    }
+
+    @Test
+    public void updateGameNegative() throws DataAccessException, ResponseException{
+        gameDb.updateGame(new GameData(9, "Random", null, "Random1", new ChessGame()));
+        GameData updatedGame = gameDb.getGame(9);
+        Assertions.assertNull(updatedGame);
+    }
+
+    @Test
+    public void clearPositive() throws DataAccessException, ResponseException{
+        gameDb.clearGames();
+        List<GameData> empty = new ArrayList<>();
+        Assertions.assertEquals(gameDb.listGames(), empty);
+    }
 }
