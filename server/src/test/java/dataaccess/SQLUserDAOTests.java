@@ -41,4 +41,10 @@ public class SQLUserDAOTests {
     public void getUserNegative() throws ResponseException{
         Assertions.assertNull(userDb.getUser("random"));
     }
+
+    @Test
+    public void clearUserPositive() throws ResponseException{
+        userDb.clearUsers();
+        Assertions.assertNull(userDb.getUser("test"));
+    }
 }
