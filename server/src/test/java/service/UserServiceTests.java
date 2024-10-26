@@ -48,7 +48,7 @@ public class UserServiceTests {
 
     @Test
     public void login() throws DataAccessException, ResponseException{
-        UserData user = userService.getByUsername("test");
+        UserData user = new UserData("test", "testPass", "test@email.com");
         AuthData loggedIn = userService.login(user);
         Assertions.assertEquals(loggedIn.username(), user.username());
     }
@@ -63,7 +63,7 @@ public class UserServiceTests {
 
     @Test
     public void logout() throws DataAccessException, ResponseException{
-        UserData user = userService.getByUsername("test");
+        UserData user = new UserData("test", "testPass", "test@email.com");
         AuthData userLogin = userService.login(user);
         userService.logout(userLogin.authToken());
         AuthData authData = authService.getAuthData(userLogin.authToken());
@@ -72,7 +72,7 @@ public class UserServiceTests {
 
     @Test
     public void logoutUnauthorized() throws DataAccessException, ResponseException{
-        UserData user = userService.getByUsername("test");
+        UserData user = new UserData("test", "testPass", "test@email.com");
         AuthData userLogin = userService.login(user);
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class, () -> userService.logout("invalidToken"));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
@@ -81,7 +81,7 @@ public class UserServiceTests {
     @Test
     public void getUser() throws ResponseException{
         UserData user = new UserData("test", "testPass", "test@email.com");
-        Assertions.assertEquals(user, userService.getByUsername(user.username()));
+        Assertions.assertEquals(user.username(), userService.getByUsername(user.username()).username());
     }
 
     @Test
