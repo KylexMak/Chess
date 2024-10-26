@@ -56,4 +56,9 @@ public class SQLAuthDAOTests {
         Assertions.assertNotNull(authDB.getAuthData("test"));
     }
 
+    @Test
+    public void clearPositive() throws ResponseException{
+        authDB.clearAllAuthData();
+        Assertions.assertNull(authDB.getAuthData("test"));
+    }
 }
