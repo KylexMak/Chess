@@ -28,7 +28,8 @@ public class SQLUserDAOTests {
 
     @Test
     public void addingUserNegative(){
-        ResponseException exception = Assertions.assertThrows(ResponseException.class, () -> userDb.addUser(new UserData(null, "password", "negative@test.com")));
+        ResponseException exception = Assertions.assertThrows(ResponseException.class,
+                () -> userDb.addUser(new UserData(null, "password", "negative@test.com")));
         Assertions.assertNotNull(exception);
     }
 

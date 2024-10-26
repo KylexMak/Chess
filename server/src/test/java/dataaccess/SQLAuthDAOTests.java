@@ -30,7 +30,8 @@ public class SQLAuthDAOTests {
     @Test
     public void createAuthNegative() throws ResponseException{
         authDB.createAuthData(new AuthData("negative", "NegativeTest"));
-        ResponseException exception = Assertions.assertThrows(ResponseException.class, () -> authDB.createAuthData(new AuthData("negative", "NegativeTest")));
+        ResponseException exception = Assertions.assertThrows(ResponseException.class,
+                () -> authDB.createAuthData(new AuthData("negative", "NegativeTest")));
         Assertions.assertNotNull(exception);
     }
 

@@ -34,7 +34,8 @@ public class SQLGameDAOTests {
 
     @Test
     public void createGameNegative(){
-        ResponseException exception = Assertions.assertThrows(ResponseException.class, () -> gameDb.createGame(new GameData(1, null, null, "test4", new ChessGame())));
+        ResponseException exception = Assertions.assertThrows(ResponseException.class,
+                () -> gameDb.createGame(new GameData(1, null, null, "test4", new ChessGame())));
         Assertions.assertNotNull(exception);
     }
 
