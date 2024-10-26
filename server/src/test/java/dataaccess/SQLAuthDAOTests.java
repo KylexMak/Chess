@@ -44,5 +44,16 @@ public class SQLAuthDAOTests {
         Assertions.assertNull(authDB.getAuthData("random"));
     }
 
+    @Test
+    public void deleteAuthPositive() throws ResponseException{
+        authDB.deleteAuthData("test");
+        Assertions.assertNull(authDB.getAuthData("test"));
+    }
+
+    @Test
+    public void deleteAuthNegative() throws ResponseException{
+        authDB.deleteAuthData("random");
+        Assertions.assertNotNull(authDB.getAuthData("test"));
+    }
 
 }
