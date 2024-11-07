@@ -1,7 +1,6 @@
 package ui;
 
 import com.google.gson.Gson;
-import exception.ResponseException;
 import model.*;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 
 public class ServerFacade {
     public final String serverUrl;
