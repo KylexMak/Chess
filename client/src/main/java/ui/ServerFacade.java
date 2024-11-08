@@ -3,10 +3,7 @@ package ui;
 import com.google.gson.Gson;
 import model.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -39,10 +36,10 @@ public class ServerFacade {
         }
     }
 
-    public GameId createGame(AuthData authToken, GameData game) throws IOException{
+    public GameId createGame(AuthData authToken, GameName gameName) throws IOException{
         try{
             var path = "/game";
-            return makeRequest("POST", path, game, GameId.class, authToken);
+            return makeRequest("POST", path, gameName, GameId.class, authToken);
         }
         catch (IOException e){
             throw new IOException("Could not create game");
@@ -72,7 +69,8 @@ public class ServerFacade {
     public void logout(AuthData authToken) throws IOException{
         try{
             var path = "/session";
-            makeRequest("DELETE", path, null, String.class, authToken);
+            String empty = "";
+            makeRequest("DELETE", path, empty, String.class, authToken);
         }
         catch (IOException e){
             throw new IOException("Could not logout");
@@ -83,10 +81,17 @@ public class ServerFacade {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            if(authToken == null){
+                http.setRequestProperty("Content-Type", "application/json");
+            }
+            else{
+                http.setRequestProperty("Authorization", authToken.authToken());
+            }
             http.setRequestMethod(method);
             http.setDoOutput(true);
 
-            writeBody(request, http, authToken);
+            writeBody(request, http);
+            //System.out.println(request);
             http.connect();
             return readBody(http, responseClass);
         } catch (Exception ex) {
@@ -95,17 +100,13 @@ public class ServerFacade {
     }
 
 
-    private static void writeBody(Object request, HttpURLConnection http, AuthData authToken) throws IOException {
+    private static void writeBody(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
-            if(authToken == null){
-                http.addRequestProperty("Content-Type", "application/json");
-            }
-            else{
-                http.addRequestProperty("Authorization", authToken.authToken());
-            }
             String reqData = new Gson().toJson(request);
+            //System.out.println("ReqData: " + reqData);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());
+                //System.out.println(reqBody.toString());
             }
         }
     }
@@ -113,21 +114,39 @@ public class ServerFacade {
     private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
         T response = null;
         String returnCode = null;
+        //System.out.println("Entered Read body");
         if (http.getContentLength() < 0) {
+            //System.out.println("http length is less than 0");
             try (InputStream respBody = http.getInputStream()) {
+                //System.out.println("respbody");
                 InputStreamReader reader = new InputStreamReader(respBody);
+                //System.out.println(responseClass);
                 if (responseClass != null) {
                     response = new Gson().fromJson(reader, responseClass);
-                    if(response.getClass() == String.class){
+                    //System.out.println(response);
+                    if(response != null){
+                        returnCode = getResponseCode(http, response);
+                    }
+                    else{
                         returnCode = String.valueOf(http.getResponseCode());
                     }
                 }
-
+            }
+            catch (Exception e){
+                System.out.println("failed try");
             }
         }
         if(returnCode != null){
             return (T) returnCode;
         }
         return response;
+    }
+
+    private static <T> String getResponseCode(HttpURLConnection http, T response) throws IOException {
+        String returnCode = null;
+        if(response.getClass() == String.class){
+            returnCode = String.valueOf(http.getResponseCode());
+        }
+        return returnCode;
     }
 }

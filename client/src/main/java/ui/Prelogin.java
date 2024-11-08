@@ -85,26 +85,33 @@ public class Prelogin {
         }
     }
 
+    private static void unknownCommand(int port) throws IOException{
+        System.out.println(RESET_TEXT_COLOR +
+                "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 4 for help");
+        preLoginCommands(8080);
+    }
+
     private static void evalCommand(String[] decodeCommand, ServerFacade func, int port) throws IOException{
         if(decodeCommand.length == 1){
             if(Objects.equals(decodeCommand[0], "3")){
                 quit();
             }
-            if(Objects.equals(decodeCommand[0], "4")){
+            else if(Objects.equals(decodeCommand[0], "4")){
                 help();
                 preLoginCommands(port);
             }
+            else{
+                unknownCommand(port);
+            }
         }
-        else if (decodeCommand.length == 3) {
+        else if (decodeCommand.length == 3 && decodeCommand[0].equals("1")) {
             login(decodeCommand, func, port);
         }
-        else if (decodeCommand.length == 4){
+        else if (decodeCommand.length == 4 && decodeCommand[0].equals("2")){
             register(decodeCommand, func, port);
         }
         else{
-            System.out.println(RESET_TEXT_COLOR +
-                    "Command not recognized: You may have entered a command in the wrong format or entered too many things -- press 4 for help");
-            preLoginCommands(8080);
+            unknownCommand(port);
         }
     }
 }
