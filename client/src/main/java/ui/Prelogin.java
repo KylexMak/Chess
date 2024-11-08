@@ -34,6 +34,18 @@ public class Prelogin {
                 "\t4.Print this message: \"4\" \n");
     }
 
+    private static void postHelp(){
+        System.out.println("""
+                Options:\s
+                \t1.Create game: "1", <GAME NAME>\s
+                \t2.List games: "2"\s
+                \t3.Join game: "3" <ID> <WHITE|BLACK>\s
+                \t4.Observe: "4" <ID>\s
+                \t5.Logout: "5"\s
+                \t6.Print this message: "6"\s
+                """);
+    }
+
     private static void quit(){
         System.out.println(RESET_TEXT_COLOR + "Come again! Bye!");
     }
@@ -45,6 +57,8 @@ public class Prelogin {
             AuthData auth = func.login(new Login(username, password));
             if(auth != null){
                 System.out.println(RESET_TEXT_COLOR + "Login successful!");
+                postHelp();
+                PostLogin.postLoginCommands(port, auth);
             }
         } catch (Exception e) {
             System.out.println(RESET_TEXT_COLOR + "We were unable to log you in. Make sure your username and password are correct.");
@@ -61,6 +75,8 @@ public class Prelogin {
             if(auth != null){
                 System.out.println(RESET_TEXT_COLOR + "Registered successfully! \n" +
                         username + " is logged in!");
+                postHelp();
+                PostLogin.postLoginCommands(port, auth);
             }
         }
         catch (Exception e){
@@ -86,7 +102,8 @@ public class Prelogin {
             register(decodeCommand, func, port);
         }
         else{
-            System.out.println(RESET_TEXT_COLOR + "Command not recognized: You may have entered a command in the wrong format -- press 4 for help");
+            System.out.println(RESET_TEXT_COLOR +
+                    "Command not recognized: You may have entered a command in the wrong format or entered too many things -- press 4 for help");
             preLoginCommands(8080);
         }
     }
