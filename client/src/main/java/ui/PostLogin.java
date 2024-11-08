@@ -94,14 +94,25 @@ public class PostLogin {
         }
     }
 
-//    private static void joinGame(String[] params, ServerFacade func, int port, AuthData authToken) throws IOException{
-//        try{
-//            int gameId = Integer.parseInt(params[1]);
-//            String playerColor = params[2];
-//            JoinGameRequest join = new JoinGameRequest(playerColor, gameId);
-//            func.joinGame(authToken, join);
-//        }
-//    }
+    private static void joinGame(String[] params, ServerFacade func, int port, AuthData authToken) throws IOException{
+        int gameId = Integer.parseInt(params[1]);
+        String playerColor = params[2];
+        try{
+            JoinGameRequest join = new JoinGameRequest(playerColor, gameId);
+            func.joinGame(authToken, join);
+            System.out.println(RESET_TEXT_COLOR + "Successfully joined game " + gameId + " as " + playerColor);
+        }
+        catch (Exception e){
+            System.out.println(RESET_TEXT_COLOR + "Unable to join game with game id: " + gameId);
+            postLoginCommands(port, authToken);
+        }
+    }
+
+    private static void unknownCommand(int port, AuthData authToken) throws IOException{
+        System.out.println(RESET_TEXT_COLOR +
+                "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 6 for help");
+        postLoginCommands(port, authToken);
+    }
 
     private static void evalCommand(String[] decodeCommand, ServerFacade func, int port, AuthData authToken) throws IOException{
         if(decodeCommand.length == 1){
@@ -115,6 +126,9 @@ public class PostLogin {
                 help();
                 postLoginCommands(port, authToken);
             }
+            else{
+                unknownCommand(port, authToken);
+            }
         }
         else if (decodeCommand.length == 2) {
             if(decodeCommand[0].equals("1")){
@@ -123,10 +137,19 @@ public class PostLogin {
             else if (decodeCommand[0].equals("4")) {
                 observeGame(decodeCommand[1], func, port, authToken);
             }
+            else{
+                unknownCommand(port, authToken);
+            }
         } else if (decodeCommand.length == 3) {
             if(decodeCommand[0].equals("3")){
-
+                joinGame(decodeCommand, func, port, authToken);
             }
+            else{
+                unknownCommand(port, authToken);
+            }
+        }
+        else{
+            unknownCommand(port, authToken);
         }
     }
 }

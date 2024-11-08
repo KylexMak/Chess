@@ -88,7 +88,7 @@ public class Prelogin {
     private static void unknownCommand(int port) throws IOException{
         System.out.println(RESET_TEXT_COLOR +
                 "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 4 for help");
-        preLoginCommands(8080);
+        preLoginCommands(port);
     }
 
     private static void evalCommand(String[] decodeCommand, ServerFacade func, int port) throws IOException{
