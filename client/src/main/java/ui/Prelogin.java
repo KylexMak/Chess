@@ -2,8 +2,10 @@ package ui;
 
 import model.AuthData;
 import model.Login;
+import model.UserData;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -11,7 +13,6 @@ import static ui.EscapeSequences.*;
 public class Prelogin {
     public static void preLoginCommands(int port) throws IOException{
         ServerFacade func = new ServerFacade("http://localhost:" + port);
-        System.out.println(BLACK_QUEEN + " Welcome to Chess. Login to start." + BLACK_QUEEN);
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
         String[] decodeCommand = new String[0];
@@ -51,18 +52,38 @@ public class Prelogin {
         }
     }
 
+    private static void register(String[] decodeCommand, ServerFacade func, int port) throws IOException{
+        String username = decodeCommand[1];
+        String password = decodeCommand[2];
+        String email = decodeCommand[3];
+        try {
+            AuthData auth = func.register(new UserData(username, password, email));
+            if(auth != null){
+                System.out.println(RESET_TEXT_COLOR + "Registered successfully! \n" +
+                        username + " is logged in!");
+            }
+        }
+        catch (Exception e){
+            System.out.println(RESET_TEXT_COLOR + "Unable to register user. Username may be already taken.");
+            preLoginCommands(port);
+        }
+    }
+
     private static void evalCommand(String[] decodeCommand, ServerFacade func, int port) throws IOException{
         if(decodeCommand.length == 1){
-            switch (decodeCommand[0]){
-                case "3" -> quit();
-                case "4" -> help();
+            if(Objects.equals(decodeCommand[0], "3")){
+                quit();
+            }
+            if(Objects.equals(decodeCommand[0], "4")){
+                help();
+                preLoginCommands(port);
             }
         }
         else if (decodeCommand.length == 3) {
             login(decodeCommand, func, port);
         }
         else if (decodeCommand.length == 4){
-            //register(decodeCommand);
+            register(decodeCommand, func, port);
         }
         else{
             System.out.println(RESET_TEXT_COLOR + "Command not recognized: You may have entered a command in the wrong format -- press 4 for help");
