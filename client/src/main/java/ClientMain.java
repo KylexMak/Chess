@@ -1,11 +1,10 @@
-import chess.*;
 import ui.Prelogin;
 
 import java.io.IOException;
 
 import static ui.EscapeSequences.BLACK_QUEEN;
 
-public class Main {
+public class ClientMain {
     public static void main(String[] args) throws IOException {
 //        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 //        System.out.println("♕ 240 Chess Client: " + piece);
