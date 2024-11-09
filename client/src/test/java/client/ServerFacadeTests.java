@@ -58,11 +58,16 @@ public class ServerFacadeTests {
         }
     }
 
+    @BeforeEach
+    public void setup(){
+        clearDB();
+    }
+
     @Test
     public void registerTestPositive() {
         AuthData auth;
         try {
-            auth = func.register(new UserData("testUser", "testPassword", "testEmail"));
+            auth = func.register(new UserData("testing", "testing", "testEmail"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -85,8 +90,8 @@ public class ServerFacadeTests {
     public void loginTestPositive() {
         AuthData auth;
         try {
-            func.register(new UserData("testUser", "testPassword", "testEmail"));
-            auth = func.login(new Login("testUser", "testPassword"));
+            func.register(new UserData("hi", "hi", "testEmail"));
+            auth = func.login(new Login("hi", "hi"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +108,7 @@ public class ServerFacadeTests {
     public void createGameTestPositive() {
         GameId id;
         try {
-            AuthData auth = func.register(new UserData("testUser", "testPassword", "testEmail"));
+            AuthData auth = func.register(new UserData("testly", "testly", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -122,14 +127,14 @@ public class ServerFacadeTests {
         GameId id;
         ListGames list;
         try {
-            AuthData auth = func.register(new UserData("testUser", "testPassword", "testEmail"));
+            AuthData auth = func.register(new UserData("faker", "faker", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
             func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID()));
             list = func.listGames(auth);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Assertions.assertTrue(list.games().contains(new GameData(id.gameID(), "testUser", null, "testGame", new ChessGame())));
+        Assertions.assertTrue(list.games().contains(new GameData(id.gameID(), "faker", null, "testGame", new ChessGame())));
     }
 
     @Test
@@ -144,7 +149,7 @@ public class ServerFacadeTests {
         GameId id;
         ListGames list;
         try {
-            AuthData auth = func.register(new UserData("testUser", "testPassword", "testEmail"));
+            AuthData auth = func.register(new UserData("fake", "fake", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
             func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID()));
             list = func.listGames(auth);
@@ -178,9 +183,8 @@ public class ServerFacadeTests {
     public void logoutUserNegativeTest() {
         AuthData auth;
         GameId id;
-        ListGames list;
         try {
-            auth = func.register(new UserData("testUser", "testPassword", "testEmail"));
+            auth = func.register(new UserData("test", "test", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
             func.logout(auth);
         } catch (IOException e) {
