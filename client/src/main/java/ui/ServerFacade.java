@@ -132,9 +132,6 @@ public class ServerFacade {
                     }
                 }
             }
-            catch (Exception e){
-                System.out.println("failed try");
-            }
         }
         if(returnCode != null){
             return (T) returnCode;

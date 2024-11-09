@@ -78,6 +78,9 @@ public class Prelogin {
                 postHelp();
                 PostLogin.postLoginCommands(port, auth);
             }
+            else{
+                throw new IOException("Could not register");
+            }
         }
         catch (Exception e){
             System.out.println(RESET_TEXT_COLOR + "Unable to register user. Username may be already taken.");
