@@ -23,7 +23,7 @@ public class JoinGameHandler implements Route {
         String authToken = request.headers("authorization");
         JoinGameRequest person = serializer.fromJson(request.body(), JoinGameRequest.class);
         try{
-            gameService.joinGame(person.gameID(), authToken, person.playerColor());
+            gameService.joinGame(authToken, person);
             return "";
         }
         catch(DataAccessException dataAccessException){

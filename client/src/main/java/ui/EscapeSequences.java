@@ -5,6 +5,9 @@ package ui;
  */
 public class EscapeSequences {
 
+    public static final String ROW_LABEL_SPACING = "\u2003\u2004\u2006\u200a";
+    public static final String ROW_LABEL_PADDING = "\u2004\u200a";
+
     private static final String UNICODE_ESCAPE = "\u001b";
     private static final String ANSI_ESCAPE = "\033";
 

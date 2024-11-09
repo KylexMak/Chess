@@ -6,10 +6,7 @@ import dataaccess.GameDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.SQLGameDAO;
 import exception.ResponseException;
-import model.AuthData;
-import model.GameData;
-import model.GameId;
-import model.ListGames;
+import model.*;
 
 import java.util.Random;
 
@@ -59,34 +56,38 @@ public class GameService {
         gameDb.updateGame(game);
     }
 
-    public void joinGame(int gameId, String authToken, String playerColor) throws DataAccessException, ResponseException{
+    public void joinGame(String authToken, JoinGameRequest player) throws DataAccessException, ResponseException{
         if(authService.getAuthData(authToken) != null){
-            GameData gameToJoin = getGame(gameId);
+            GameData gameToJoin = getGame(player.gameID());
             AuthData authData = authService.getAuthData(authToken);
-            if(playerColor == null || gameToJoin == null){
+            if(gameToJoin == null){
                 throw new DataAccessException("Error: bad request");
             }
             if(gameToJoin.blackUsername() != null && gameToJoin.whiteUsername() != null){
                 throw new DataAccessException("Error: Game is full");
             }
-            if (gameToJoin.whiteUsername() != null && playerColor.equals("WHITE")){
+            if (gameToJoin.whiteUsername() != null && player.playerColor().equalsIgnoreCase("WHITE")){
                 throw new DataAccessException("Error: already taken");
             }
             else {
-                if(playerColor.equals("WHITE")) {
-                    GameData updatedGame = new GameData(gameId, authData.username(),
-                            gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
-                    updateGame(updatedGame);
+                if (player.playerColor() != null){
+                    if(player.playerColor().equalsIgnoreCase("WHITE")) {
+                        GameData updatedGame = new GameData(player.gameID(), authData.username(),
+                                gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
+                        updateGame(updatedGame);
+                    }
                 }
             }
-            if (gameToJoin.blackUsername() != null && playerColor.equals("BLACK")){
+            if (gameToJoin.blackUsername() != null && player.playerColor().equalsIgnoreCase("BLACK")){
                 throw new DataAccessException("Error: already taken");
             }
             else{
-                if(playerColor.equals("BLACK")){
-                    GameData updatedGame = new GameData(gameId, gameToJoin.whiteUsername(),
-                            authData.username(), gameToJoin.gameName(), gameToJoin.game());
-                    updateGame(updatedGame);
+                if (player.playerColor() != null){
+                    if(player.playerColor().equalsIgnoreCase("BLACK")){
+                        GameData updatedGame = new GameData(player.gameID(), gameToJoin.whiteUsername(),
+                                authData.username(), gameToJoin.gameName(), gameToJoin.game());
+                        updateGame(updatedGame);
+                    }
                 }
             }
         }

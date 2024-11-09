@@ -86,7 +86,7 @@ public class PostLogin {
         try{
             int gameID = Integer.parseInt(gameId);
             func.joinGame(authToken, new JoinGameRequest(null, gameID));
-            System.out.println(RESET_TEXT_COLOR + "Successfully joined game as an observer!");
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + "successfully joined game as an observer!");
             postLoginCommands(port, authToken);
         }
         catch (Exception e){
@@ -100,10 +100,10 @@ public class PostLogin {
         try{
             JoinGameRequest join = new JoinGameRequest(playerColor, gameId);
             func.joinGame(authToken, join);
-            System.out.println(RESET_TEXT_COLOR + "Successfully joined game " + gameId + " as " + playerColor);
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + "successfully joined game " + gameId + " as " + playerColor);
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + "Unable to join game with game id: " + gameId);
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + "unable to join game with game id: " + gameId);
             postLoginCommands(port, authToken);
         }
     }

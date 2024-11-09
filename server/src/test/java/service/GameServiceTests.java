@@ -78,7 +78,8 @@ public class GameServiceTests {
         UserData user = new UserData("test","testPassword","test@test.com");
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test3");
-        gameService.joinGame(gameId.gameID(), userLogin.authToken(), "WHITE");
+        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID());
+        gameService.joinGame(userLogin.authToken(), player);
         GameData retrieveGame = gameService.getGame(gameId.gameID());
         Assertions.assertNotNull(retrieveGame.whiteUsername());
     }
@@ -88,8 +89,9 @@ public class GameServiceTests {
         UserData user = new UserData("test","testPassword","test@test.com");
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
+        JoinGameRequest player = new JoinGameRequest("BLACK", gameId.gameID());
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
-                () -> gameService.joinGame(gameId.gameID(), "invalidToken", "BLACK"));
+                () -> gameService.joinGame("invalidToken", player));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
     }
 
@@ -99,9 +101,10 @@ public class GameServiceTests {
         AuthData newUser = userService.register(new UserData("taco", "password", "taco@taco.com"));
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        gameService.joinGame(gameId.gameID(), newUser.authToken(), "WHITE");
+        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID());
+        gameService.joinGame(newUser.authToken(), player);
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
-                () -> gameService.joinGame(gameId.gameID(), userLogin.authToken(),"WHITE"));
+                () -> gameService.joinGame(userLogin.authToken(),player));
         Assertions.assertEquals("Error: already taken", exception.getMessage());
     }
 
