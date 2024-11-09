@@ -40,6 +40,9 @@ public class JoinGameHandler implements Route {
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
             }
+            if(errorMessage.contains("twice")){
+                response.status(403);
+            }
             ErrorMessage message = new ErrorMessage(errorMessage);
             return serializer.toJson(message);
         }

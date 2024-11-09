@@ -1,9 +1,8 @@
 package ui;
 
+import chess.ChessBoard;
 import model.*;
-import server.Server;
 
-import javax.print.attribute.standard.Severity;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -86,7 +85,7 @@ public class PostLogin {
         try{
             int gameID = Integer.parseInt(gameId);
             func.joinGame(authToken, new JoinGameRequest(null, gameID));
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + "successfully joined game as an observer!");
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game as an observer!");
             postLoginCommands(port, authToken);
         }
         catch (Exception e){
@@ -96,14 +95,16 @@ public class PostLogin {
 
     private static void joinGame(String[] params, ServerFacade func, int port, AuthData authToken) throws IOException{
         int gameId = Integer.parseInt(params[1]);
-        String playerColor = params[2];
+        String playerColor = params[2].toUpperCase();
         try{
             JoinGameRequest join = new JoinGameRequest(playerColor, gameId);
             func.joinGame(authToken, join);
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + "successfully joined game " + gameId + " as " + playerColor);
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game " + gameId + " as " + playerColor);
+            String board = BoardDrawer.printBoard(new ChessBoard(), join.playerColor());
+            System.out.println(board);
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + "unable to join game with game id: " + gameId);
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + " unable to join game with game id: " + gameId);
             postLoginCommands(port, authToken);
         }
     }

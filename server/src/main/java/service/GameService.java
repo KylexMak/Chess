@@ -8,6 +8,7 @@ import dataaccess.SQLGameDAO;
 import exception.ResponseException;
 import model.*;
 
+import java.util.Objects;
 import java.util.Random;
 
 import java.util.List;
@@ -68,6 +69,9 @@ public class GameService {
             }
             if (gameToJoin.whiteUsername() != null && player.playerColor().equalsIgnoreCase("WHITE")){
                 throw new DataAccessException("Error: already taken");
+            }
+            if((Objects.equals(gameToJoin.whiteUsername(), authData.username())) || (Objects.equals(gameToJoin.blackUsername(), authData.username()))){
+                throw new DataAccessException(("Error: you cannot join twice"));
             }
             else {
                 if (player.playerColor() != null){

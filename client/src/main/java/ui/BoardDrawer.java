@@ -5,6 +5,8 @@ import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
 
+import java.util.Objects;
+
 import static ui.EscapeSequences.*;
 
 public class BoardDrawer {
@@ -24,9 +26,9 @@ public class BoardDrawer {
             for(int col = 0; col < COLUMN_LABELS.length; col++){
                 int colIndex = isWhite ? col : 7 - col;
                 String squareColor = getSquareColor(row, colIndex);
-                String piece = getPiece(board.getPiece(new ChessPosition(rIndex, colIndex)));
+                String piece = getPiece(board.getPiece(new ChessPosition(rIndex + 1, colIndex + 1)), squareColor);
                 boardString.append(squareColor).append(piece)
-                        .append(RESET_BG_COLOR).append(RESET_TEXT_COLOR);
+                        .append(RESET_BG_COLOR);
             }
             printRowLabels(boardString,ROW_LABELS[rIndex]);
             boardString.append("\n");
@@ -39,10 +41,10 @@ public class BoardDrawer {
     }
 
     private static void printColLabels(StringBuilder boardString, boolean isWhite){
-        boardString.append(ROW_LABEL_PADDING).append(ROW_LABEL_SPACING);
+        boardString.append(ROW_LABEL_PADDING).append(ROW_LABEL_SPACING).append(" ");
         for(int i = 0; i < COLUMN_LABELS.length; i++){
             int orientationColIndex = isWhite ? i : COLUMN_LABELS.length - i - 1;
-            boardString.append(SET_TEXT_COLOR_BLACK)
+            boardString.append(SET_TEXT_COLOR_WHITE)
                     .append(COLUMN_LABELS[orientationColIndex])
                     .append(ROW_LABEL_SPACING)
                     .append(RESET_TEXT_COLOR);
@@ -51,28 +53,35 @@ public class BoardDrawer {
     }
 
     private static void printRowLabels(StringBuilder board, String rowLabel){
-        board.append(SET_TEXT_COLOR_BLACK)
+        board.append(SET_TEXT_COLOR_WHITE)
                 .append(" ")
-                .append(rowLabel);
+                .append(rowLabel)
+                .append(" ");
     }
 
     private static String getSquareColor(int row, int col){
         boolean isDarkSquare = (row + col) % 2 != 0;
-        return isDarkSquare ? SET_BG_COLOR_DARK_GREY : SET_BG_COLOR_LIGHT_GREY;
+        return isDarkSquare ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN;
     }
 
-    private static String getPiece(ChessPiece piece){
+    private static String getPiece(ChessPiece piece, String color){
         if(piece == null){
-            return EMPTY;
+//            if(Objects.equals(color, SET_BG_COLOR_LIGHT_BROWN)){
+//                return SET_TEXT_COLOR_LIGHT_BROWN + BLACK_PAWN;
+//            }
+//            else if(Objects.equals(color, SET_BG_COLOR_DARK_BROWN)){
+//                return SET_TEXT_COLOR_DARK_BROWN + BLACK_PAWN;
+//            }
+            return EMPTY_PIECE;
         }
         String pieceChar = "";
         switch(piece.getPieceType()){
-            case ROOK -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_ROOK : BLACK_ROOK;
-            case KNIGHT -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
-            case BISHOP -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_BISHOP : BLACK_BISHOP;
-            case KING -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_KING : BLACK_KING;
-            case QUEEN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
-            case PAWN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_PAWN : BLACK_PAWN;
+            case ROOK -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_ROOK : SET_TEXT_COLOR_BLACK + BLACK_ROOK;
+            case KNIGHT -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_KNIGHT : SET_TEXT_COLOR_BLACK + BLACK_KNIGHT;
+            case BISHOP -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_BISHOP : SET_TEXT_COLOR_BLACK + BLACK_BISHOP;
+            case KING -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_KING : SET_TEXT_COLOR_BLACK + BLACK_KING;
+            case QUEEN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_QUEEN : SET_TEXT_COLOR_BLACK + BLACK_QUEEN;
+            case PAWN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_PAWN : SET_TEXT_COLOR_BLACK + BLACK_PAWN;
         }
         return pieceChar;
     }
