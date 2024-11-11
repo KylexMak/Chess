@@ -46,10 +46,10 @@ public class ServerFacade {
         }
     }
 
-    public void joinGame(AuthData authToken, JoinGameRequest player) throws IOException{
+    public GameData joinGame(AuthData authToken, JoinGameRequest player) throws IOException{
         try{
             var path = "/game";
-            makeRequest("PUT", path, player, GameId.class, authToken);
+            return makeRequest("PUT", path, player, GameData.class, authToken);
         }
         catch (IOException e){
             throw new IOException("Could not join game");

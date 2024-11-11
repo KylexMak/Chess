@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import exception.ResponseException;
 import model.ErrorMessage;
+import model.GameData;
 import model.JoinGameRequest;
 import service.GameService;
 import spark.Request;
@@ -23,8 +24,8 @@ public class JoinGameHandler implements Route {
         String authToken = request.headers("authorization");
         JoinGameRequest person = serializer.fromJson(request.body(), JoinGameRequest.class);
         try{
-            gameService.joinGame(authToken, person);
-            return "";
+            GameData game = gameService.joinGame(authToken, person);
+            return serializer.toJson(game);
         }
         catch(DataAccessException dataAccessException){
             String errorMessage = dataAccessException.getMessage();

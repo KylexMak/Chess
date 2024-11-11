@@ -57,9 +57,10 @@ public class GameService {
         gameDb.updateGame(game);
     }
 
-    public void joinGame(String authToken, JoinGameRequest player) throws DataAccessException, ResponseException{
-        if(authService.getAuthData(authToken) != null){
-            GameData gameToJoin = getGame(player.gameID());
+    public GameData joinGame(String authToken, JoinGameRequest player) throws DataAccessException, ResponseException{
+        GameData gameToJoin = getGame(player.gameID());
+        if(authService.getAuthData(authToken) != null && player.playerColor() != null){
+            GameData updatedGame = null;
             AuthData authData = authService.getAuthData(authToken);
             if(gameToJoin == null){
                 throw new DataAccessException("Error: bad request");
@@ -76,7 +77,7 @@ public class GameService {
             else {
                 if (player.playerColor() != null){
                     if(player.playerColor().equalsIgnoreCase("WHITE")) {
-                        GameData updatedGame = new GameData(player.gameID(), authData.username(),
+                        updatedGame = new GameData(player.gameID(), authData.username(),
                                 gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
                         updateGame(updatedGame);
                     }
@@ -88,12 +89,16 @@ public class GameService {
             else{
                 if (player.playerColor() != null){
                     if(player.playerColor().equalsIgnoreCase("BLACK")){
-                        GameData updatedGame = new GameData(player.gameID(), gameToJoin.whiteUsername(),
+                        updatedGame = new GameData(player.gameID(), gameToJoin.whiteUsername(),
                                 authData.username(), gameToJoin.gameName(), gameToJoin.game());
                         updateGame(updatedGame);
                     }
                 }
             }
+            return updatedGame;
+        }
+        else if(player.playerColor() == null){
+            return gameToJoin;
         }
         else{
             throw new DataAccessException("Error: unauthorized");

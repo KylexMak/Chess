@@ -17,7 +17,7 @@ public class Prelogin {
         String command = input.nextLine();
         String[] decodeCommand = new String[0];
         if(command.isEmpty()){
-            System.out.println("Please enter a command or press 4 for help");
+            System.out.println("Please enter a command or press 4 for help \n");
             preLoginCommands(port);
         }
         else{
@@ -56,12 +56,12 @@ public class Prelogin {
         try{
             AuthData auth = func.login(new Login(username, password));
             if(auth != null){
-                System.out.println(RESET_TEXT_COLOR + "Login successful!");
+                System.out.println(RESET_TEXT_COLOR + "Login successful! \n");
                 postHelp();
                 PostLogin.postLoginCommands(port, auth);
             }
         } catch (Exception e) {
-            System.out.println(RESET_TEXT_COLOR + "We were unable to log you in. Make sure your username and password are correct.");
+            System.out.println(RESET_TEXT_COLOR + "We were unable to log you in. Make sure your username and password are correct. \n");
             preLoginCommands(port);
         }
     }
@@ -74,7 +74,7 @@ public class Prelogin {
             AuthData auth = func.register(new UserData(username, password, email));
             if(auth != null){
                 System.out.println(RESET_TEXT_COLOR + "Registered successfully! \n" +
-                        username + " is logged in!");
+                        username + " is logged in!\n");
                 postHelp();
                 PostLogin.postLoginCommands(port, auth);
             }
@@ -83,14 +83,14 @@ public class Prelogin {
             }
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + "Unable to register user. Username may be already taken.");
+            System.out.println(RESET_TEXT_COLOR + "Unable to register user. Username may be already taken. \n");
             preLoginCommands(port);
         }
     }
 
     private static void unknownCommand(int port) throws IOException{
         System.out.println(RESET_TEXT_COLOR +
-                "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 4 for help");
+                "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 4 for help \n");
         preLoginCommands(port);
     }
 

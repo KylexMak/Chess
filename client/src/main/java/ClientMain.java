@@ -16,6 +16,6 @@ public class ClientMain {
                 \t3.Exit the program: "3"\s
                 \t4.Print this message: "4"\s
                 """);
-        Prelogin.preLoginCommands(8080);
+        Prelogin.preLoginCommands(226);
     }
 }
