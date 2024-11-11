@@ -79,12 +79,18 @@ public class BoardDrawer {
         }
         String pieceChar = "";
         switch(piece.getPieceType()){
-            case ROOK -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_ROOK : SET_TEXT_COLOR_BLACK + BLACK_ROOK;
-            case KNIGHT -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_KNIGHT : SET_TEXT_COLOR_BLACK + BLACK_KNIGHT;
-            case BISHOP -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_BISHOP : SET_TEXT_COLOR_BLACK + BLACK_BISHOP;
-            case KING -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_KING : SET_TEXT_COLOR_BLACK + BLACK_KING;
-            case QUEEN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_QUEEN : SET_TEXT_COLOR_BLACK + BLACK_QUEEN;
-            case PAWN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? SET_TEXT_COLOR_WHITE + BLACK_PAWN : SET_TEXT_COLOR_BLACK + BLACK_PAWN;
+            case ROOK -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_ROOK : SET_TEXT_COLOR_BLACK + BLACK_ROOK;
+            case KNIGHT -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_KNIGHT : SET_TEXT_COLOR_BLACK + BLACK_KNIGHT;
+            case BISHOP -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_BISHOP : SET_TEXT_COLOR_BLACK + BLACK_BISHOP;
+            case KING -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_KING : SET_TEXT_COLOR_BLACK + BLACK_KING;
+            case QUEEN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_QUEEN : SET_TEXT_COLOR_BLACK + BLACK_QUEEN;
+            case PAWN -> pieceChar = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ?
+                    SET_TEXT_COLOR_WHITE + BLACK_PAWN : SET_TEXT_COLOR_BLACK + BLACK_PAWN;
         }
         return pieceChar;
     }
