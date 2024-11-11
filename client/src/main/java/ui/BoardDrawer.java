@@ -69,12 +69,6 @@ public class BoardDrawer {
 
     private static String getPiece(ChessPiece piece, String color){
         if(piece == null){
-//            if(Objects.equals(color, SET_BG_COLOR_LIGHT_BROWN)){
-//                return SET_TEXT_COLOR_LIGHT_BROWN + BLACK_PAWN;
-//            }
-//            else if(Objects.equals(color, SET_BG_COLOR_DARK_BROWN)){
-//                return SET_TEXT_COLOR_DARK_BROWN + BLACK_PAWN;
-//            }
             return EMPTY_PIECE;
         }
         String pieceChar = "";
