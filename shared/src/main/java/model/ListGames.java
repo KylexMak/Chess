@@ -7,15 +7,15 @@ import java.util.Objects;
 public record ListGames(List<GameData> games) {
     private List<String> convert(List<GameData> games){
         List<String> gamesAsString = new ArrayList<>();
-        for(GameData game : games){
+        for(int i = 1; i <= games.size(); i++){
             gamesAsString.add("Game ID: ");
-            gamesAsString.add(game.gameID() + " | ");
+            gamesAsString.add(i + " | ");
             gamesAsString.add("Game Name: ");
-            gamesAsString.add(game.gameName() + " | ");
+            gamesAsString.add(games.get(i - 1).gameName() + " | ");
             gamesAsString.add("White Username: ");
-            gamesAsString.add(game.whiteUsername() + " | ");
+            gamesAsString.add(games.get(i - 1).whiteUsername() + " | ");
             gamesAsString.add("Black Username: ");
-            gamesAsString.add(game.blackUsername() + "\n");
+            gamesAsString.add(games.get(i - 1).blackUsername() + "\n");
         }
         return gamesAsString;
     }

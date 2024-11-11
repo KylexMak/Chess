@@ -58,7 +58,8 @@ public class GameService {
     }
 
     public GameData joinGame(String authToken, JoinGameRequest player) throws DataAccessException, ResponseException{
-        GameData gameToJoin = getGame(player.gameID());
+        ListGames gameList = listGames(authToken);
+        GameData gameToJoin = gameList.games().get(player.gameID() - 1);
         if(authService.getAuthData(authToken) != null && player.playerColor() != null){
             GameData updatedGame = null;
             AuthData authData = authService.getAuthData(authToken);
@@ -77,7 +78,7 @@ public class GameService {
             else {
                 if (player.playerColor() != null){
                     if(player.playerColor().equalsIgnoreCase("WHITE")) {
-                        updatedGame = new GameData(player.gameID(), authData.username(),
+                        updatedGame = new GameData(gameToJoin.gameID(), authData.username(),
                                 gameToJoin.blackUsername(), gameToJoin.gameName(), gameToJoin.game());
                         updateGame(updatedGame);
                     }
@@ -89,7 +90,7 @@ public class GameService {
             else{
                 if (player.playerColor() != null){
                     if(player.playerColor().equalsIgnoreCase("BLACK")){
-                        updatedGame = new GameData(player.gameID(), gameToJoin.whiteUsername(),
+                        updatedGame = new GameData(gameToJoin.gameID(), gameToJoin.whiteUsername(),
                                 authData.username(), gameToJoin.gameName(), gameToJoin.game());
                         updateGame(updatedGame);
                     }

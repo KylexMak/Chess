@@ -15,7 +15,7 @@ public class BoardDrawer {
     private static final String[] ROW_LABELS = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
     public static String printBoard(ChessBoard board, String color){
-        boolean isWhite = color.equalsIgnoreCase("white");
+        boolean isWhite = color == null || color.equalsIgnoreCase("white");
         StringBuilder boardString = new StringBuilder(ERASE_SCREEN);
         printColLabels(boardString, isWhite);
         boardString.append("\n");
@@ -24,8 +24,8 @@ public class BoardDrawer {
             int rIndex = isWhite ? 7 - row : row;
             printRowLabels(boardString, ROW_LABELS[rIndex]);
             for(int col = 0; col < COLUMN_LABELS.length; col++){
-                int colIndex = isWhite ? col : 7 - col;
-                String squareColor = getSquareColor(row, colIndex);
+                int colIndex = isWhite ? col : (7 - col);
+                String squareColor = getSquareColor(row, colIndex, isWhite);
                 String piece = getPiece(board.getPiece(new ChessPosition(rIndex + 1, colIndex + 1)), squareColor);
                 boardString.append(squareColor).append(piece)
                         .append(RESET_BG_COLOR);
@@ -59,9 +59,12 @@ public class BoardDrawer {
                 .append(" ");
     }
 
-    private static String getSquareColor(int row, int col){
-        boolean isDarkSquare = (row + col) % 2 != 0;
-        return isDarkSquare ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN;
+    private static String getSquareColor(int row, int col, boolean isWhite){
+        boolean isLightSquare = (row + col) % 2 == 0;
+        if(!isWhite){
+            isLightSquare = !isLightSquare;
+        }
+        return isLightSquare ? SET_BG_COLOR_LIGHT_BROWN : SET_BG_COLOR_DARK_BROWN;
     }
 
     private static String getPiece(ChessPiece piece, String color){

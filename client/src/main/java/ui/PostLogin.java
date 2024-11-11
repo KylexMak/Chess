@@ -76,7 +76,7 @@ public class PostLogin {
             GameName name = new GameName(gameName);
             GameId gameId = func.createGame(authToken, name);
             if(gameId != null){
-                System.out.println("Game has been created with id: " + gameId.gameID() + "\n");
+                System.out.println("Game has been created!\n");
                 postLoginCommands(port, authToken);
             }
         }
@@ -147,7 +147,7 @@ public class PostLogin {
             postLoginCommands(port,authToken);
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + " unable to join game with game id: " + gameId + "\n");
+            System.out.println(RESET_TEXT_COLOR + authToken.username() + " unable to join game with game id\n");
             postLoginCommands(port, authToken);
         }
     }
