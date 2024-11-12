@@ -6,6 +6,7 @@ import exception.ResponseException;
 import model.ErrorMessage;
 import model.GameData;
 import model.JoinGameRequest;
+import model.ListGames;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -24,7 +25,7 @@ public class JoinGameHandler implements Route {
         String authToken = request.headers("authorization");
         JoinGameRequest person = serializer.fromJson(request.body(), JoinGameRequest.class);
         try{
-            GameData game = gameService.joinGame(authToken, person);
+            GameData game = gameService.joinGame(authToken, person, person.isObserver());
             return serializer.toJson(game);
         }
         catch(DataAccessException dataAccessException){

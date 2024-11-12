@@ -265,7 +265,7 @@ public class StandardAPITests {
         TestCreateResult createResult = serverFacade.createGame(createRequest, existingAuth);
 
         //try join as white
-        TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor.WHITE, null);
+        TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor.WHITE, 777);
         TestResult joinResult = serverFacade.joinPlayer(joinRequest, existingAuth);
 
         //check
@@ -325,8 +325,8 @@ public class StandardAPITests {
         String game4Name = "All by myself";
         TestCreateResult game4 = serverFacade.createGame(new TestCreateRequest(game4Name), authC.getAuthToken());
         serverFacade.joinPlayer(new TestJoinRequest(ChessGame.TeamColor.WHITE, game4.getGameID()), authC.getAuthToken());
-        serverFacade.joinPlayer(new TestJoinRequest(ChessGame.TeamColor.BLACK, game4.getGameID()), authC.getAuthToken());
-        expectedList.add(new TestListEntry(game4.getGameID(), game4Name, authC.getUsername(), authC.getUsername()));
+        serverFacade.joinPlayer(new TestJoinRequest(ChessGame.TeamColor.BLACK, game4.getGameID()), authB.getAuthToken());
+        expectedList.add(new TestListEntry(game4.getGameID(), game4Name, authC.getUsername(), authB.getUsername()));
 
 
         //list games

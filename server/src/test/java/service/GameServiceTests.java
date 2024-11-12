@@ -78,9 +78,8 @@ public class GameServiceTests {
         UserData user = new UserData("test","testPassword","test@test.com");
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test3");
-        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID());
-        gameService.joinGame(userLogin.authToken(), player);
-        GameData retrieveGame = gameService.getGame(gameId.gameID());
+        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID(), false);
+        GameData retrieveGame = gameService.joinGame(userLogin.authToken(), player, player.isObserver());
         Assertions.assertNotNull(retrieveGame.whiteUsername());
     }
 
@@ -89,9 +88,9 @@ public class GameServiceTests {
         UserData user = new UserData("test","testPassword","test@test.com");
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        JoinGameRequest player = new JoinGameRequest("BLACK", gameId.gameID());
+        JoinGameRequest player = new JoinGameRequest("BLACK", gameId.gameID(), false);
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
-                () -> gameService.joinGame("invalidToken", player));
+                () -> gameService.joinGame("invalidToken", player, player.isObserver()));
         Assertions.assertEquals("Error: unauthorized", exception.getMessage());
     }
 
@@ -101,10 +100,10 @@ public class GameServiceTests {
         AuthData newUser = userService.register(new UserData("taco", "password", "taco@taco.com"));
         AuthData userLogin = userService.login(user);
         GameId gameId = gameService.createGame(userLogin.authToken(), "Test4");
-        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID());
-        gameService.joinGame(newUser.authToken(), player);
+        JoinGameRequest player = new JoinGameRequest("WHITE", gameId.gameID(), false);
+        gameService.joinGame(newUser.authToken(), player, player.isObserver());
         DataAccessException exception = Assertions.assertThrows(DataAccessException.class,
-                () -> gameService.joinGame(userLogin.authToken(),player));
+                () -> gameService.joinGame(userLogin.authToken(),player, player.isObserver()));
         Assertions.assertEquals("Error: already taken", exception.getMessage());
     }
 

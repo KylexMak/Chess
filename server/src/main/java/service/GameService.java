@@ -57,9 +57,36 @@ public class GameService {
         gameDb.updateGame(game);
     }
 
-    public GameData joinGame(String authToken, JoinGameRequest player) throws DataAccessException, ResponseException{
+    private JoinGameRequest makePlayerRequest(JoinGameRequest player,  String authToken) throws ResponseException, DataAccessException {
         ListGames gameList = listGames(authToken);
-        GameData gameToJoin = gameList.games().get(player.gameID() - 1);
+        int count = 0;
+        int index;
+        GameData actual;
+        try{
+            GameData game = getGame(player.gameID());
+            for(GameData games : gameList.games()){
+                if(Objects.equals(games.gameID(), game.gameID())){
+                    index = count;
+                    actual = gameList.games().get(index);
+                    return new JoinGameRequest(player.playerColor(), actual.gameID(), player.isObserver());
+                }
+                count++;
+            }
+            return null;
+        }
+        catch (Exception e){
+            throw new DataAccessException("Error: bad request");
+        }
+    }
+    public GameData joinGame(String authToken, JoinGameRequest player, boolean isObserver) throws DataAccessException, ResponseException{
+        GameData gameToJoin;
+        try{
+            JoinGameRequest play = makePlayerRequest(player, authToken);
+            gameToJoin = getGame(play.gameID());
+        }
+        catch(Exception e){
+            throw new DataAccessException(e.getMessage());
+        }
         if(authService.getAuthData(authToken) != null && player.playerColor() != null){
             GameData updatedGame = null;
             AuthData authData = authService.getAuthData(authToken);
@@ -100,6 +127,9 @@ public class GameService {
             return updatedGame;
         }
         else if(player.playerColor() == null){
+            if(!isObserver){
+                throw new DataAccessException("Error: bad request");
+            }
             return gameToJoin;
         }
         else{

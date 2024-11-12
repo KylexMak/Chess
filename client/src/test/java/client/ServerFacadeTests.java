@@ -129,7 +129,7 @@ public class ServerFacadeTests {
         try {
             AuthData auth = func.register(new UserData("faker", "faker", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
-            func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID()));
+            func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID(), false));
             list = func.listGames(auth);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -140,7 +140,7 @@ public class ServerFacadeTests {
     @Test
     public void joinGameNegativeTest() {
         AuthData fakeAuth = new AuthData("user", "auth");
-        IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(fakeAuth, new JoinGameRequest("WHITE", 123890)));
+        IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(fakeAuth, new JoinGameRequest("WHITE", 123890, false)));
         Assertions.assertEquals("Could not join game", thrown.getMessage());
     }
 
@@ -151,7 +151,7 @@ public class ServerFacadeTests {
         try {
             AuthData auth = func.register(new UserData("fake", "fake", "testEmail"));
             id = func.createGame(auth, new GameName("testGame"));
-            func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID()));
+            func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID(), false));
             list = func.listGames(auth);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -190,7 +190,7 @@ public class ServerFacadeTests {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID())));
+        IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID(), false)));
         Assertions.assertEquals("Could not join game", thrown.getMessage());
     }
 }

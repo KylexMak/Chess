@@ -89,7 +89,7 @@ public class PostLogin {
     private static void observeGame(String gameId, ServerFacade func, int port, AuthData authToken) throws IOException{
         try{
             int gameID = Integer.parseInt(gameId);
-            GameData game = func.joinGame(authToken, new JoinGameRequest(null, gameID));
+            GameData game = func.joinGame(authToken, new JoinGameRequest(null, gameID, true));
             System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game as an observer!\n");
             String board = BoardDrawer.printBoard(game.game().getBoard(), "WHITE");
             System.out.println(board);
@@ -122,8 +122,10 @@ public class PostLogin {
         int gameId = Integer.parseInt(params[1]);
         String playerColor = params[2].toUpperCase();
         try{
-            JoinGameRequest join = new JoinGameRequest(playerColor, gameId);
-            GameData game = func.joinGame(authToken, join);
+            ListGames games = func.listGames(authToken);
+            GameData game = games.games().get(gameId);
+            JoinGameRequest join = new JoinGameRequest(playerColor, game.gameID(), false);
+            game = func.joinGame(authToken, join);
             System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game " + gameId + " as " + playerColor + "\n");
             String board = BoardDrawer.printBoard(game.game().getBoard(), join.playerColor());
             System.out.println(board);
