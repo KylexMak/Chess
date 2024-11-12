@@ -99,10 +99,6 @@ public class GameService {
             if (gameToJoin.whiteUsername() != null && player.playerColor().equalsIgnoreCase("WHITE")){
                 throw new DataAccessException("Error: already taken");
             }
-            if((Objects.equals(gameToJoin.whiteUsername(), authData.username())) ||
-                    (Objects.equals(gameToJoin.blackUsername(), authData.username()))){
-                throw new DataAccessException(("Error: you cannot join twice"));
-            }
             else {
                 if (player.playerColor() != null){
                     if(player.playerColor().equalsIgnoreCase("WHITE")) {
