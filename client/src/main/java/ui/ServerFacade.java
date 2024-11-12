@@ -52,7 +52,17 @@ public class ServerFacade {
             return makeRequest("PUT", path, player, GameData.class, authToken);
         }
         catch (IOException e){
-            throw new IOException("Could not join game");
+            String error = "";
+            if(e.getMessage().contains("400")){
+                error = "Bad request\n";
+            }
+            if(e.getMessage().contains("403")){
+                error = "Color already taken\n";
+            }
+            if(e.getMessage().contains("401")){
+                error = "User unauthorized\n";
+            }
+            throw new IOException("Could not join game: " + error);
         }
     }
 

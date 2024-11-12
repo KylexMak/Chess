@@ -93,9 +93,6 @@ public class GameService {
             if(gameToJoin == null){
                 throw new DataAccessException("Error: bad request");
             }
-            if(gameToJoin.blackUsername() != null && gameToJoin.whiteUsername() != null){
-                throw new DataAccessException("Error: Game is full");
-            }
             if (gameToJoin.whiteUsername() != null && player.playerColor().equalsIgnoreCase("WHITE")){
                 throw new DataAccessException("Error: already taken");
             }

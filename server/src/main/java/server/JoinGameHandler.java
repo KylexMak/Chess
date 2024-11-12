@@ -33,17 +33,12 @@ public class JoinGameHandler implements Route {
             if(errorMessage.contains("bad request")){
                 response.status(400);
             }
-            if(errorMessage.contains("already taken")){
+            if(errorMessage.contains("already taken") ||
+                    errorMessage.contains("full")){
                 response.status(403);
-            }
-            if(errorMessage.contains("full")){
-                response.status(500);
             }
             if(errorMessage.contains("unauthorized")){
                 response.status(401);
-            }
-            if(errorMessage.contains("twice")){
-                response.status(403);
             }
             ErrorMessage message = new ErrorMessage(errorMessage);
             return serializer.toJson(message);

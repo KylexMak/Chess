@@ -89,7 +89,9 @@ public class PostLogin {
     private static void observeGame(String gameId, ServerFacade func, int port, AuthData authToken) throws IOException{
         try{
             int gameID = Integer.parseInt(gameId);
-            GameData game = func.joinGame(authToken, new JoinGameRequest(null, gameID, true));
+            ListGames games = func.listGames(authToken);
+            GameData game = func.joinGame(authToken,
+                    new JoinGameRequest(null, games.games().get(gameID - 1).gameID(), true));
             System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game as an observer!\n");
             String board = BoardDrawer.printBoard(game.game().getBoard(), "WHITE");
             System.out.println(board);
@@ -119,12 +121,20 @@ public class PostLogin {
     }
 
     private static void joinGame(String[] params, ServerFacade func, int port, AuthData authToken) throws IOException{
-        int gameId = Integer.parseInt(params[1]);
-        String playerColor = params[2].toUpperCase();
+        int gameId = 0;
+        String playerColor = null;
+        try{
+            gameId = Integer.parseInt(params[1]);
+            playerColor = params[2].toUpperCase();
+        }
+        catch(Exception e){
+            System.out.println("Invalid format. Please press 6 for help \n");
+            postLoginCommands(port, authToken);
+        }
         try{
             ListGames games = func.listGames(authToken);
-            GameData game = games.games().get(gameId);
-            JoinGameRequest join = new JoinGameRequest(playerColor, game.gameID(), false);
+            GameData game;
+            JoinGameRequest join = new JoinGameRequest(playerColor, games.games().get(gameId - 1).gameID(), false);
             game = func.joinGame(authToken, join);
             System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game " + gameId + " as " + playerColor + "\n");
             String board = BoardDrawer.printBoard(game.game().getBoard(), join.playerColor());
@@ -149,7 +159,7 @@ public class PostLogin {
             postLoginCommands(port,authToken);
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + " unable to join game with game id\n");
+            System.out.println(RESET_TEXT_COLOR + e.getMessage());
             postLoginCommands(port, authToken);
         }
     }

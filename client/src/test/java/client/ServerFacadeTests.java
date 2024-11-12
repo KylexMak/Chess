@@ -141,7 +141,7 @@ public class ServerFacadeTests {
     public void joinGameNegativeTest() {
         AuthData fakeAuth = new AuthData("user", "auth");
         IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(fakeAuth, new JoinGameRequest("WHITE", 123890, false)));
-        Assertions.assertEquals("Could not join game", thrown.getMessage());
+        Assertions.assertEquals("Could not join game: User unauthorized\n", thrown.getMessage());
     }
 
     @Test
@@ -191,6 +191,6 @@ public class ServerFacadeTests {
             throw new RuntimeException(e);
         }
         IOException thrown = Assertions.assertThrows(IOException.class, () -> func.joinGame(auth, new JoinGameRequest("WHITE", id.gameID(), false)));
-        Assertions.assertEquals("Could not join game", thrown.getMessage());
+        Assertions.assertEquals("Could not join game: User unauthorized\n", thrown.getMessage());
     }
 }
