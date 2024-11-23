@@ -17,9 +17,7 @@ import websocket.messages.Notification;
 
 import javax.websocket.Session;
 import java.io.IOException;
-import java.lang.reflect.GenericArrayType;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @WebSocket
@@ -33,11 +31,24 @@ public class WebsocketHandler {
     }
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message){
+    public void onMessage(Session session, String message) throws IOException {
         UserGameCommand input = new Gson().fromJson(message, UserGameCommand.class);
         switch(input.getCommandType()){
             case CONNECT -> {
                 Connect player = new Gson().fromJson(message, Connect.class);
+                connectPlayer(player, session);
+            }
+            case MAKE_MOVE -> {
+                MakeMove move = new Gson().fromJson(message, MakeMove.class);
+                makeMove(move, session);
+            }
+            case LEAVE -> {
+                Leave player = new Gson().fromJson(message, Leave.class);
+                leaveGame(player, session);
+            }
+            case RESIGN -> {
+                Resign player = new Gson().fromJson(message, Resign.class);
+                resign(player, session);
             }
         }
     }
@@ -159,6 +170,70 @@ public class WebsocketHandler {
             Error message = new Error(e.getMessage());
             String error = new Gson().toJson(message);
             connections.sendToConnection(session, error);
+        }
+    }
+
+    public void leaveGame(Leave player, Session session) throws IOException {
+        try{
+            AuthData userInfo = authService.getAuthData(player.getAuthToken());
+            String authToken = userInfo.authToken();
+            int gameId = player.getGameID();
+            String username = userInfo.username();
+            UserConnections user = connections.getPlayer(gameId, authToken);
+
+            if (user.color == null) {
+                connections.removePlayer(gameId, authToken);
+                Notification notification = new Notification(username + " has left the game as an observer.");
+                String notifString = new Gson().toJson(notification);
+                connections.broadcastMessage(gameId, authToken, notifString);
+            }
+            else{
+                connections.removePlayer(gameId, authToken);
+                GameData game = gameService.getGame(gameId);
+                GameData removePlayer = null;
+                if(user.color == ChessGame.TeamColor.WHITE){
+                    removePlayer = new GameData(gameId, null, game.blackUsername(),
+                            game.gameName(), game.game());
+                }
+                else if (user.color == ChessGame.TeamColor.BLACK){
+                    removePlayer = new GameData(gameId, game.whiteUsername(), null,
+                            game.gameName(), game.game());
+                }
+                gameService.updateGame(removePlayer);
+                Notification notification = new Notification(username + " has left the game as " + user.color);
+                String notifString = new Gson().toJson(notification);
+                connections.broadcastMessage(gameId, authToken, notifString);
+            }
+        } catch (Exception e) {
+            Error error = new Error(e.getMessage());
+            String errorString = new Gson().toJson(error);
+            connections.sendToConnection(session, errorString);
+        }
+    }
+
+    public void resign(Resign player, Session session) throws IOException {
+        try{
+            AuthData userInfo = authService.getAuthData(player.getAuthToken());
+            String authToken = player.getAuthToken();
+            int gameId = player.getGameID();
+            String username = userInfo.username();
+
+            GameData game = gameService.getGame(gameId);
+            String winner = Objects.equals(username, game.whiteUsername()) ? game.blackUsername() : game.whiteUsername();
+
+            UserConnections user = connections.getPlayer(gameId, authToken);
+
+            if(user.color != null){
+                Notification notification = new Notification(winner + " has won!\n" +
+                        username + " has resigned from the game as " + user.color + ".\n" +
+                        "Type 3 to leave the game.\n");
+                String notifString = new Gson().toJson(notification);
+                connections.broadcastMessage(gameId, authToken, notifString);
+            }
+        } catch (Exception e) {
+            Error error = new Error(e.getMessage());
+            String errorString = new Gson().toJson(error);
+            connections.sendToConnection(session, errorString);
         }
     }
 
