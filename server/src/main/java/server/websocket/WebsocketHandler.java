@@ -10,7 +10,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import service.AuthService;
 import service.GameService;
-import service.UserService;
 import websocket.commands.*;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
@@ -23,7 +22,6 @@ import java.util.Objects;
 @WebSocket
 public class WebsocketHandler {
     private final ConnectionManager connections = new ConnectionManager();
-    UserService userService = new UserService();
     GameService gameService = new GameService();
     AuthService authService = new AuthService();
 
