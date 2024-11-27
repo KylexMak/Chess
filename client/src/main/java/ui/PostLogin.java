@@ -43,6 +43,16 @@ public class PostLogin {
                 "\t4.Print this message: \"4\" \n");
     }
 
+    private static void gameHelp(){
+        System.out.println(SET_TEXT_COLOR_BLUE + "Options: \n" +
+                "\t1.Redraw board: \"1\" \n" +
+                "\t2.Move: \"3\", <START POSITION> <END POSITION> <PROMOPIECE(only if applicable)> \n" +
+                "\t3.Highlight possible moves: \"3\" <POSITION>\n" +
+                "\t4.Resign: \"4\" \n" +
+                "\t5.Leave: \"5\" \n" +
+                "\t6.Print this message: \"6\" \n");
+    }
+
     private static void listGames(ServerFacade func, int port, AuthData authToken) throws RuntimeException{
         try{
             ListGames games = func.listGames(authToken);

@@ -44,6 +44,12 @@ public class WebsocketClient extends Endpoint {
         send(message);
     }
 
+    public void redrawGame(AuthData authToken, Integer gameId) throws Exception {
+        Redraw game = new Redraw(authToken.authToken(), gameId);
+        var message = new Gson().toJson(game);
+        send(message);
+    }
+
     public void send(String message) throws Exception {
         this.session.getBasicRemote().sendText(message);
     }
