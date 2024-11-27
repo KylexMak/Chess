@@ -4,6 +4,7 @@ import model.AuthData;
 import websocket.NotificationHandler;
 import websocket.WebsocketClient;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.SET_TEXT_COLOR_BLUE;
@@ -58,6 +59,15 @@ public class Gameplay {
                     gameHelp();
                     gameplayCommands(port, auth, gameId);
                 }
+                default -> {
+                    System.out.println("Command not recognized. You may have added too many parameters. Please type 6 for help. \n");
+                    gameplayCommands(port, auth, gameId);
+                }
+            }
+        }
+        else if (decodeCommand.length == 2){
+            if(Objects.equals(decodeCommand[0], "3")){
+
             }
         }
     }
