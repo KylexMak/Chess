@@ -1,8 +1,8 @@
 package server.websocket;
 
 import chess.ChessGame;
+import org.eclipse.jetty.websocket.api.Session;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,7 +46,7 @@ public class ConnectionManager {
     }
 
     public void sendToConnection(Session session, String message) throws IOException {
-        session.getBasicRemote().sendText(message);
+        session.getRemote().sendString(message);
     }
 
     public void broadcastMessage(int gameId, String authToken, String message) throws IOException {
@@ -54,12 +54,12 @@ public class ConnectionManager {
         UserConnections whitePlayer = game.whitePlayer;
         UserConnections blackPlayer = game.blackPlayer;
 
-        if(whitePlayer != null && Objects.equals(whitePlayer.authToken, authToken)){
+        if(whitePlayer != null && !Objects.equals(whitePlayer.authToken, authToken)){
             if(whitePlayer.session.isOpen()){
                 whitePlayer.send(message);
             }
         }
-        if(blackPlayer != null && Objects.equals(blackPlayer.authToken, authToken)){
+        if(blackPlayer != null && !Objects.equals(blackPlayer.authToken, authToken)){
             if(blackPlayer.session.isOpen()){
                 blackPlayer.send(message);
             }

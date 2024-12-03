@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import model.AuthData;
 import ui.BoardDrawer;
 import websocket.commands.*;
-import websocket.messages.Error;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
 import websocket.messages.ServerMessage;
@@ -80,7 +80,7 @@ public class WebsocketClient extends Endpoint {
                             System.out.println(notification.getNotificationMessage());
                         }
                         case ERROR -> {
-                            Error error = new Gson().fromJson(s, Error.class);
+                            ErrorMessage error = new Gson().fromJson(s, ErrorMessage.class);
                             System.out.println(error.getErrorMessage());
                         }
                     }

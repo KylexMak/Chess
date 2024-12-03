@@ -1,8 +1,8 @@
 package server.websocket;
 
 import chess.ChessGame;
+import org.eclipse.jetty.websocket.api.Session;
 
-import javax.websocket.Session;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 

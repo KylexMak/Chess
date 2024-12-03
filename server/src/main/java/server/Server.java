@@ -4,6 +4,7 @@ import dataaccess.DataAccessException;
 import exception.ResponseException;
 import model.JoinGameRequest;
 import model.ListGames;
+import server.websocket.WebsocketHandler;
 import spark.*;
 
 public class Server {
@@ -14,6 +15,7 @@ public class Server {
     ListGamesHandler list;
     CreateGameHandler create;
     JoinGameHandler join;
+    WebsocketHandler ws;
     {
         try{
             clear = new ClearHandler();
@@ -23,6 +25,7 @@ public class Server {
             list = new ListGamesHandler();
             create = new CreateGameHandler();
             join = new JoinGameHandler();
+            ws = new WebsocketHandler();
         }
         catch (ResponseException | DataAccessException e){
             throw new RuntimeException(e);
@@ -36,6 +39,7 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+        Spark.webSocket("/connect", ws);
 
         // Register your endpoints and handle exceptions here.
         Spark.delete("/db", clear);

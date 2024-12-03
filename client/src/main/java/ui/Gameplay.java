@@ -1,6 +1,7 @@
 package ui;
 
 import model.AuthData;
+import model.GameData;
 import websocket.NotificationHandler;
 import websocket.WebsocketClient;
 
@@ -29,6 +30,10 @@ public class Gameplay {
         }
         evalCommand(decodeCommand, func, port, auth, gameId);
     }
+
+//    private void redraw(int gameId, String authToken){
+//        GameData game =
+//    }
 
     private static void gameHelp(){
         System.out.println(SET_TEXT_COLOR_BLUE + "Options: \n" +

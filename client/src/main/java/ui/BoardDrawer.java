@@ -5,6 +5,7 @@ import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 import static ui.EscapeSequences.*;
@@ -26,6 +27,38 @@ public class BoardDrawer {
             for(int col = 0; col < COLUMN_LABELS.length; col++){
                 int colIndex = isWhite ? col : (7 - col);
                 String squareColor = getSquareColor(row, colIndex, isWhite);
+                String piece = getPiece(board.getPiece(new ChessPosition(rIndex + 1, colIndex + 1)), squareColor);
+                boardString.append(squareColor).append(piece)
+                        .append(RESET_BG_COLOR);
+            }
+            printRowLabels(boardString,ROW_LABELS[rIndex]);
+            boardString.append("\n");
+        }
+
+        printColLabels(boardString, isWhite);
+        boardString.append("\n");
+
+        return boardString.toString();
+    }
+
+    public static String printHighlightedBoard(ChessBoard board, String color, HashSet<ChessPosition> validMoves){
+        boolean isWhite = color == null || color.equalsIgnoreCase("white");
+        StringBuilder boardString = new StringBuilder(ERASE_SCREEN);
+        printColLabels(boardString, isWhite);
+        boardString.append("\n");
+
+        for(int row = 0; row < ROW_LABELS.length; row ++){
+            int rIndex = isWhite ? 7 - row : row;
+            printRowLabels(boardString, ROW_LABELS[rIndex]);
+            for(int col = 0; col < COLUMN_LABELS.length; col++){
+                int colIndex = isWhite ? col : (7 - col);
+                String squareColor = getSquareColor(row, colIndex, isWhite);
+
+                ChessPosition move = new ChessPosition(row, colIndex);
+                if(validMoves.contains(move)){
+                    squareColor = SET_BG_COLOR_MAGENTA;
+                }
+
                 String piece = getPiece(board.getPiece(new ChessPosition(rIndex + 1, colIndex + 1)), squareColor);
                 boardString.append(squareColor).append(piece)
                         .append(RESET_BG_COLOR);

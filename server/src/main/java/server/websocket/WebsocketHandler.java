@@ -6,17 +6,20 @@ import dataaccess.DataAccessException;
 import exception.ResponseException;
 import model.AuthData;
 import model.GameData;
+import model.ListGames;
+import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import service.AuthService;
 import service.GameService;
 import websocket.commands.*;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @WebSocket
@@ -51,17 +54,22 @@ public class WebsocketHandler {
         }
     }
 
-    private void connectPlayer(Connect player, Session session){
+    private void connectPlayer(Connect player, Session session) throws IOException {
         try{
             String authToken = player.getAuthToken();
-            int gameId = player.getGameID();
+            ListGames games = gameService.listGames(player.getAuthToken());
+            GameData game = null;
+            int gameId = 0;
+            if(!games.games().isEmpty()){
+                game = games.games().get(player.getGameID() - 1);
+                gameId = game.gameID();
+            }
             ChessGame.TeamColor color = player.getTeamColor();
             AuthData user = authService.getAuthData(authToken);
             if(user == null){
                 throw new Exception("Error: Unauthorized");
             }
-            GameData game = gameService.getGame(gameId);
-            if(game == null){
+            if(game == null || gameId == 0){
                 throw new Exception("Error: Game does not exist");
             }
             if(verifyPlayer(game, color, user.username())){
@@ -73,11 +81,11 @@ public class WebsocketHandler {
                 Notification notification;
                 if(color != null){
                     notification = new Notification("Notification: " + user.username() +
-                            " has joined the game as " + color);
+                            " has joined the game as " + color + "\n");
                 }
                 else{
                     notification = new Notification("Notification: " + user.username() +
-                            " has joined the game as an observer");
+                            " has joined the game as an observer \n");
                 }
                 String stringNotification = new Gson().toJson(notification);
                 connections.broadcastMessage(gameId, authToken, stringNotification);
@@ -87,7 +95,9 @@ public class WebsocketHandler {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ErrorMessage error = new ErrorMessage(e.getMessage());
+            String errorString = new Gson().toJson(error);
+            connections.sendToConnection(session, errorString);
         }
     }
 
@@ -96,8 +106,9 @@ public class WebsocketHandler {
             String authToken = move.getAuthToken();
             int gameId = move.getGameID();
             ChessMove desiredMove = move.getChessMove();
+            GameData actual = gameService.getGameByIndex(gameId - 1, authToken);
             UserConnections user = connections.getPlayer(gameId, authToken);
-            ChessGame game = gameService.getGame(gameId).game();
+            ChessGame game = gameService.getGame(actual.gameID()).game();
 
             if(user.color == null){
                 throw new Exception("Error: You cannot move as an observer");
@@ -165,7 +176,7 @@ public class WebsocketHandler {
                     gameAfterMove.blackUsername(), gameAfterMove.gameName(), game);
             gameService.updateGame(sendToUpdate);
         } catch (Exception e) {
-            Error message = new Error(e.getMessage());
+            ErrorMessage message = new ErrorMessage(e.getMessage());
             String error = new Gson().toJson(message);
             connections.sendToConnection(session, error);
         }
@@ -177,33 +188,33 @@ public class WebsocketHandler {
             String authToken = userInfo.authToken();
             int gameId = player.getGameID();
             String username = userInfo.username();
-            UserConnections user = connections.getPlayer(gameId, authToken);
+            GameData game = gameService.getGameByIndex(gameId - 1, authToken);
+            UserConnections user = connections.getPlayer(game.gameID(), authToken);
 
             if (user.color == null) {
-                connections.removePlayer(gameId, authToken);
+                connections.removePlayer(game.gameID(), authToken);
                 Notification notification = new Notification(username + " has left the game as an observer.");
                 String notifString = new Gson().toJson(notification);
-                connections.broadcastMessage(gameId, authToken, notifString);
+                connections.broadcastMessage(game.gameID(), authToken, notifString);
             }
             else{
-                connections.removePlayer(gameId, authToken);
-                GameData game = gameService.getGame(gameId);
+                connections.removePlayer(game.gameID(), authToken);
                 GameData removePlayer = null;
                 if(user.color == ChessGame.TeamColor.WHITE){
-                    removePlayer = new GameData(gameId, null, game.blackUsername(),
+                    removePlayer = new GameData(game.gameID(), null, game.blackUsername(),
                             game.gameName(), game.game());
                 }
                 else if (user.color == ChessGame.TeamColor.BLACK){
-                    removePlayer = new GameData(gameId, game.whiteUsername(), null,
+                    removePlayer = new GameData(game.gameID(), game.whiteUsername(), null,
                             game.gameName(), game.game());
                 }
                 gameService.updateGame(removePlayer);
                 Notification notification = new Notification(username + " has left the game as " + user.color);
                 String notifString = new Gson().toJson(notification);
-                connections.broadcastMessage(gameId, authToken, notifString);
+                connections.broadcastMessage(game.gameID(), authToken, notifString);
             }
         } catch (Exception e) {
-            Error error = new Error(e.getMessage());
+            ErrorMessage error = new ErrorMessage(e.getMessage());
             String errorString = new Gson().toJson(error);
             connections.sendToConnection(session, errorString);
         }
@@ -215,21 +226,24 @@ public class WebsocketHandler {
             String authToken = player.getAuthToken();
             int gameId = player.getGameID();
             String username = userInfo.username();
-
-            GameData game = gameService.getGame(gameId);
+            GameData game = gameService.getGameByIndex(gameId - 1, authToken);
             String winner = Objects.equals(username, game.whiteUsername()) ? game.blackUsername() : game.whiteUsername();
 
-            UserConnections user = connections.getPlayer(gameId, authToken);
+            UserConnections user = connections.getPlayer(game.gameID(), authToken);
 
             if(user.color != null){
                 Notification notification = new Notification(winner + " has won!\n" +
                         username + " has resigned from the game as " + user.color + ".\n" +
-                        "Type 3 to leave the game.\n");
+                        "Type 5 to leave the game.\n");
                 String notifString = new Gson().toJson(notification);
-                connections.broadcastMessage(gameId, authToken, notifString);
+                connections.sendToConnection(session, notifString);
+                connections.broadcastMessage(game.gameID(), authToken, notifString);
+            }
+            else{
+                throw new Exception("Cannot resign as observer");
             }
         } catch (Exception e) {
-            Error error = new Error(e.getMessage());
+            ErrorMessage error = new ErrorMessage(e.getMessage());
             String errorString = new Gson().toJson(error);
             connections.sendToConnection(session, errorString);
         }

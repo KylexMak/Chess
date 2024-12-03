@@ -1,7 +1,10 @@
 package ui;
 
 import chess.ChessBoard;
+import chess.ChessGame;
 import model.*;
+import websocket.NotificationHandler;
+import websocket.WebsocketClient;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -146,27 +149,34 @@ public class PostLogin {
             GameData game;
             JoinGameRequest join = new JoinGameRequest(playerColor, games.games().get(gameId - 1).gameID(), false);
             game = func.joinGame(authToken, join);
+            NotificationHandler handler = new NotificationHandler();
+            WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken.authToken(), gameId, handler);
+            ws.connectGame(authToken, gameId, ChessGame.TeamColor.valueOf(playerColor));
             System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game " + gameId + " as " + playerColor + "\n");
             String board = BoardDrawer.printBoard(game.game().getBoard(), join.playerColor());
             System.out.println(board);
-            Scanner input = new Scanner(System.in);
-            String command;
-            String[] decodeCommand;
-            joinOptions();
-            while(true){
-                command = input.nextLine();;
-                if(command.isEmpty()){
-                    System.out.println("Please enter a command or press 3 for help \n");
-                }
-                decodeCommand = command.split(" ");
-                if(decodeCommand[0].equals("2")){
-                    System.out.println("You have resigned \n");
-                    break;
-                }
-                evalJoin(decodeCommand, board);
-            }
-            help();
-            postLoginCommands(port,authToken);
+
+            gameHelp();
+            Gameplay.gameplayCommands(port, authToken, gameId);
+//            Scanner input = new Scanner(System.in);
+//            String command;
+//            String[] decodeCommand;
+//
+//            joinOptions();
+//            while(true){
+//                command = input.nextLine();;
+//                if(command.isEmpty()){
+//                    System.out.println("Please enter a command or press 3 for help \n");
+//                }
+//                decodeCommand = command.split(" ");
+//                if(decodeCommand[0].equals("2")){
+//                    System.out.println("You have resigned \n");
+//                    break;
+//                }
+//                evalJoin(decodeCommand, board);
+//            }
+//            help();
+//            postLoginCommands(port,authToken);
         }
         catch (Exception e){
             System.out.println(RESET_TEXT_COLOR + e.getMessage());

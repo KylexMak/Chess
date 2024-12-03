@@ -44,6 +44,11 @@ public class GameService {
         return gameDb.getGame(gameId);
     }
 
+    public GameData getGameByIndex(int index, String authToken) throws ResponseException, DataAccessException {
+        ListGames games = listGames(authToken);
+        return games.games().get(index);
+    }
+
     public ListGames listGames(String authToken) throws DataAccessException, ResponseException{
         if(authService.getAuthData(authToken) == null){
             throw new DataAccessException("Error: unauthorized");

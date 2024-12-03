@@ -1,8 +1,8 @@
 package server.websocket;
 
 import chess.ChessGame;
+import org.eclipse.jetty.websocket.api.Session;
 
-import javax.websocket.Session;
 import java.io.IOException;
 
 public class UserConnections {
@@ -19,6 +19,6 @@ public class UserConnections {
     }
 
     public void send(String message) throws IOException {
-        session.getBasicRemote().sendText(message);
+        session.getRemote().sendString(message);
     }
 }
