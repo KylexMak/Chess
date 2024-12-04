@@ -109,8 +109,8 @@ public class PostLogin {
             WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken, gameID, handler);
             ws.connectGame(authToken, gameID, null);
 
-            help();
-            postLoginCommands(port, authToken);
+            gameHelp();
+            Gameplay.gameplayCommands(port, authToken, game);
         }
         catch (Exception e){
             System.out.println(RESET_TEXT_COLOR + "Unable to join game as observer. \n");
@@ -142,7 +142,7 @@ public class PostLogin {
             Gameplay.gameplayCommands(port, authToken, game);
         }
         catch (Exception e){
-            System.out.println(RESET_TEXT_COLOR + e.getMessage());
+            System.out.println(RESET_TEXT_COLOR + "Are all your inputs correct? We were unable to have you join the game.\n");
             postLoginCommands(port, authToken);
         }
     }

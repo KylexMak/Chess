@@ -63,15 +63,15 @@ public class ChessGame {
             return null;
         }
         else {
-            moves = piece.pieceMoves(board, startPosition);
+            moves = piece.pieceMoves(activeGame, startPosition);
         }
         for(ChessMove move : moves){
-            board.addPiece(move.getStartPosition(), null);
-            board.addPiece(move.getEndPosition(), piece);
+            activeGame.addPiece(move.getStartPosition(), null);
+            activeGame.addPiece(move.getEndPosition(), piece);
             if(!isInCheck(piece.getTeamColor())) {
                 validMoves.add(move);
             }
-           this.board = activeGame.copy();
+           activeGame = board.copy();
         }
         return validMoves;
     }

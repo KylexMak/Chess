@@ -6,6 +6,7 @@ import model.GameData;
 import websocket.NotificationHandler;
 import websocket.WebsocketClient;
 
+import javax.websocket.OnClose;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -40,16 +41,28 @@ public class Gameplay {
 
     public static void redraw(ChessBoard gameNew, AuthData auth){
         gameBoard = gameNew;
-        String color = Objects.equals(auth.username(), gameData.whiteUsername()) ?
-                "WHITE" : "BLACK";
+        String color = null;
+        if(Objects.equals(auth.username(), gameData.blackUsername())){
+            color = "BLACK";
+        }
+        else{
+            color = "WHITE";
+        }
         String board = BoardDrawer.printBoard(gameBoard, color);
         System.out.println(board);
     }
 
     private static void highlight(GameData game, AuthData auth, String move) throws Exception {
         ChessBoard board = gameBoard;
-        String color = Objects.equals(auth.username(), game.whiteUsername()) ?
-                "WHITE" : "BLACK";
+        ChessGame chessGame = new ChessGame();
+        chessGame.setBoard(board);
+        String color = null;
+        if(Objects.equals(auth.username(), gameData.blackUsername())){
+            color = "BLACK";
+        }
+        else{
+            color = "WHITE";
+        }
         if(move.length() != 2){
             throw new Exception("Error: Move syntax incorrect");
         }
@@ -64,11 +77,7 @@ public class Gameplay {
         ChessPosition position = new ChessPosition(row, col);
         ChessPiece piece = board.getPiece(position);
 
-        if(piece.getTeamColor() != game.game().getTeamTurn()){
-            throw new Exception("Error: It is not your turn so you cannot highlight moves.");
-        }
-
-        Collection<ChessMove> validMoves = game.game().validMoves(position);
+        Collection<ChessMove> validMoves = chessGame.validMoves(position);
 
         HashSet<ChessPosition> moves = validMoves.stream()
                 .map(ChessMove::getEndPosition)
@@ -149,6 +158,10 @@ public class Gameplay {
                     System.out.println(e.getMessage() + " Please type 6 for help. \n");
                     gameplayCommands(port, auth, gameInfo);
                 }
+            }
+            else{
+                System.out.println("Command not recognized. You may have added too many parameters. Please type 6 for help. \n");
+                gameplayCommands(port, auth, gameInfo);
             }
         }
         else if (decodeCommand.length == 3){
