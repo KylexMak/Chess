@@ -296,8 +296,8 @@ public class WebsocketHandler {
         int row = position.getRow() + 1;
         int col = position.getColumn() + 1;
 
-        char rowChar = interpretRow.get(row);
-        char colChar = interpretCol.get(col);
+        char rowChar = INTERPRET_ROW.get(row);
+        char colChar = INTERPRET_COL.get(col);
 
         return rowChar + String.valueOf(colChar);
     }
@@ -327,7 +327,7 @@ public class WebsocketHandler {
         return piece;
     }
 
-    public static final Map<Integer, Character> interpretCol = new HashMap<>(){{
+    public static final Map<Integer, Character> INTERPRET_COL = new HashMap<>(){{
         put(1, 'a');
         put(2, 'b');
         put(3, 'c');
@@ -338,7 +338,7 @@ public class WebsocketHandler {
         put(8, 'h');
     }};
 
-    public static final Map<Integer, Character> interpretRow = new HashMap<>(){{
+    public static final Map<Integer, Character> INTERPRET_ROW = new HashMap<>(){{
         put(1, '1');
         put(2, '2');
         put(3, '3');

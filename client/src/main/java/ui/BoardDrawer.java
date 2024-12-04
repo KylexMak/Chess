@@ -124,7 +124,7 @@ public class BoardDrawer {
         return pieceChar;
     }
 
-    public static final Map<Character, Integer> interpretCol = new HashMap<>(){{
+    public static final Map<Character, Integer> INTERPRET_COL = new HashMap<>(){{
       put('a', 1);
       put('b', 2);
       put('c', 3);
@@ -135,7 +135,7 @@ public class BoardDrawer {
       put('h', 8);
     }};
 
-    public static final Map<Character, Integer> interpretRow = new HashMap<>(){{
+    public static final Map<Character, Integer> INTERPRET_ROW = new HashMap<>(){{
         put('1', 1);
         put('2', 2);
         put('3', 3);
@@ -146,7 +146,7 @@ public class BoardDrawer {
         put('8', 8);
     }};
 
-    public static final Map<Character, ChessPiece.PieceType> interpretPiece = new HashMap<>(){{
+    public static final Map<Character, ChessPiece.PieceType> INTERPRET_PIECE = new HashMap<>(){{
         put('b', BISHOP);
         put('k', KNIGHT);
         put('q', QUEEN);

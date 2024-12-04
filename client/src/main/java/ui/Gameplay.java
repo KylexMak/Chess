@@ -54,8 +54,8 @@ public class Gameplay {
             throw new Exception("Error: Move syntax incorrect");
         }
 
-        Integer col = interpretCol.get(move.charAt(0));
-        Integer row = interpretRow.get(move.charAt(1));
+        Integer col = INTERPRET_COL.get(move.charAt(0));
+        Integer row = INTERPRET_ROW.get(move.charAt(1));
 
         if(row == null || col == null){
             throw new Exception("Error: The row or column input is not recognized.");
@@ -80,14 +80,14 @@ public class Gameplay {
     }
 
     private static void makeMove(AuthData auth, GameData game, String start, String end, String promo) throws Exception {
-        Integer startCol = interpretCol.get(start.charAt(0));
-        Integer startRow = interpretRow.get(start.charAt(1));
-        Integer endCol = interpretCol.get(end.charAt(0));
-        Integer endRow = interpretRow.get(end.charAt(1));
+        Integer startCol = INTERPRET_COL.get(start.charAt(0));
+        Integer startRow = INTERPRET_ROW.get(start.charAt(1));
+        Integer endCol = INTERPRET_COL.get(end.charAt(0));
+        Integer endRow = INTERPRET_ROW.get(end.charAt(1));
         ChessPiece.PieceType promotion = null;
 
         if(promo != null){
-            promotion = interpretPiece.get(promo.charAt(0));
+            promotion = INTERPRET_PIECE.get(promo.charAt(0));
         }
 
         if(startCol == null || startRow == null ||
