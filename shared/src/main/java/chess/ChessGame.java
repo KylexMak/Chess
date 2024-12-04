@@ -14,6 +14,7 @@ import java.util.Objects;
 public class ChessGame {
     TeamColor currentTurn;
     ChessBoard board;
+    boolean isGameOver;
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard();
@@ -34,6 +35,7 @@ public class ChessGame {
      */
     public void setTeamTurn(TeamColor team) {
         currentTurn = team;
+        isGameOver = false;
     }
 
 
@@ -243,6 +245,14 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    public void setIsGameOver(boolean result){
+        isGameOver = result;
+    }
+
+    public boolean getIsGameOver(){
+        return isGameOver;
     }
 
     @Override

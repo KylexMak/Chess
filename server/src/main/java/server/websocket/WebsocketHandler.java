@@ -125,15 +125,15 @@ public class WebsocketHandler {
             ChessGame game = actual.game();
 
             if(user.color == null){
-                throw new Exception("Error: You cannot move as an observer");
+                throw new Exception("Error: You cannot move as an observer.");
             }
             if(user.color != game.getTeamTurn()){
-                throw new Exception("Error: It is not your turn");
-            }
-            if(game.isInCheckmate(user.color) || game.isInStalemate(user.color)){
-                throw new Exception("Error: The game has ended. No more moves can be made.");
+                throw new Exception("Error: It is not your turn.");
             }
 
+            if(game.getIsGameOver()){
+                throw new Exception("Error: The game has ended. No more moves can be made.");
+            }
             ChessPosition start = desiredMove.getStartPosition();
             String startString = interpretPositionString(start);
             ChessPosition end = desiredMove.getEndPosition();
@@ -143,12 +143,12 @@ public class WebsocketHandler {
             String pieceString = interpretPieceTypeString(piece.getPieceType());
 
             if(piece.getTeamColor() != user.color){
-                throw new Exception("Error: This is not your piece");
+                throw new Exception("Error: This is not your piece.");
             }
 
             Collection<ChessMove> validMoves = game.validMoves(start);
             if(!validMoves.contains(desiredMove)){
-                throw new Exception("Error: That is not a valid move");
+                throw new Exception("Error: That is not a valid move.");
             }
 
             game.makeMove(desiredMove);
@@ -158,7 +158,14 @@ public class WebsocketHandler {
             connections.sendToConnection(session, stringUpdatedGame);
             connections.broadcastMessage(gameId, authToken, stringUpdatedGame);
 
-            String opposingColor = Objects.equals(user.color.toString(), "WHITE") ? "white" : "black";
+            String opposingColor = Objects.equals(user.color.toString(), "WHITE") ? "black" : "white";
+            String opposingUser = null;
+            if(Objects.equals(user.username, actual.whiteUsername())){
+                opposingUser = actual.blackUsername();
+            }
+            else if (Objects.equals(user.username, actual.blackUsername())) {
+                opposingUser = actual.whiteUsername();
+            }
 
             String moveNotification = user.username + " moved " + pieceString + " from " + startString +
                     " to " + endString;
@@ -167,9 +174,10 @@ public class WebsocketHandler {
             connections.broadcastMessage(gameId, authToken, stringNotification);
 
             if(game.isInCheck(game.getTeamTurn())){
-                String check = opposingColor + " is in check";
+                String check = opposingUser + " playing as " + opposingColor + " is in check";
                 Notification checkNotification = new Notification("Notification: " + check + "\n");
                 String stringCheckNotification = new Gson().toJson(checkNotification);
+                connections.sendToConnection(session, stringCheckNotification);
                 connections.broadcastMessage(gameId, authToken, stringCheckNotification);
             }
             else{
@@ -181,6 +189,7 @@ public class WebsocketHandler {
                     endGame = "stalemate";
                 }
                 if(!endGame.isEmpty()){
+                    game.setIsGameOver(true);
                     String gameOver = opposingColor + "is in " + endGame + ". Game Over";
                     Notification gameOverNotification = new Notification("Notification: " + gameOver + "\n");
                     String stringGameOver = new Gson().toJson(gameOverNotification);
@@ -242,11 +251,18 @@ public class WebsocketHandler {
             int gameId = player.getGameID();
             String username = userInfo.username();
             GameData game = gameService.getGame(gameId);
+            ChessGame play = game.game();
             String winner = Objects.equals(username, game.whiteUsername()) ? game.blackUsername() : game.whiteUsername();
 
             UserConnections user = connections.getPlayer(gameId, authToken);
-
+            if(play.getIsGameOver()){
+                throw new Exception("Error: You cannot resign. The game is already over.");
+            }
             if(user.color != null){
+                play.setIsGameOver(true);
+                GameData updatedGame = new GameData(game.gameID(), game.whiteUsername(), game.blackUsername(),
+                        game.gameName(), play);
+                gameService.updateGame(updatedGame);
                 Notification notification = new Notification("Notification: " + winner + " has won!\n" +
                         username + " has resigned from the game as " + user.color + ".\n" +
                         "Type 5 to leave the game.\n");

@@ -15,10 +15,12 @@ public class ChessGameSerializer implements JsonSerializer<ChessGame>, JsonDeser
 
         ChessGame.TeamColor teamColor = ChessGame.TeamColor.valueOf(teamTurnString);
         ChessBoard board = context.deserialize(boardJson, ChessBoard.class);
+        boolean isGameOver = object.get("isGameOver").getAsBoolean();
 
         ChessGame game = new ChessGame();
         game.setBoard(board);
         game.setTeamTurn(teamColor);
+        game.setIsGameOver(isGameOver);
 
         return game;
     }
@@ -28,6 +30,7 @@ public class ChessGameSerializer implements JsonSerializer<ChessGame>, JsonDeser
         JsonObject result = new JsonObject();
         result.addProperty("currentTurn", src.getTeamTurn().toString());
         result.add("board", context.serialize(src.getBoard(), ChessBoard.class));
+        result.addProperty("isGameOver", src.getIsGameOver());
         return result;
     }
 }
