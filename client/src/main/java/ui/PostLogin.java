@@ -147,25 +147,6 @@ public class PostLogin {
         }
     }
 
-    private static void evalObserve(String[] decodeCommand){
-        if(decodeCommand[0].equals("2")){
-            observeOptions();
-        }
-    }
-
-    private static void joinOptions(){
-        System.out.println(SET_TEXT_COLOR_BLUE + "Options:\n" +
-                "\t1.Redraw board \"1\" \n" +
-                "\t2.Resign \"2\" \n" +
-                "\t3.Print out these options again. \"3\" \n");
-    }
-
-    private static void observeOptions(){
-        System.out.println(SET_TEXT_COLOR_BLUE + "Options:\n" +
-                "\t1.Leave game \"1\" \n" +
-                "\t2.Print out these options again. \"2\" \n");
-    }
-
     private static void unknownCommand(int port, AuthData authToken) throws IOException{
         System.out.println(RESET_TEXT_COLOR +
                 "Command not recognized: You may have entered a command in the wrong format or entered too many/few things -- press 6 for help\n");

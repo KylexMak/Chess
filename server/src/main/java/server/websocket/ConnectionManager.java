@@ -25,10 +25,6 @@ public class ConnectionManager {
         return null;
     }
 
-    public void removeGame(int gameId){
-        connections.remove(gameId);
-    }
-
     public void addPlayer(int gamedId, String authToken, String username, ChessGame.TeamColor color, Session session){
         GameConnections game = connections.get(gamedId);
         assert(game != null);
