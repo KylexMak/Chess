@@ -77,6 +77,10 @@ public class Gameplay {
         ChessPosition position = new ChessPosition(row, col);
         ChessPiece piece = board.getPiece(position);
 
+        if(piece == null){
+            throw new Exception("Error: There is no piece there. Please select another square to highlight.");
+        }
+
         Collection<ChessMove> validMoves = chessGame.validMoves(position);
 
         HashSet<ChessPosition> moves = validMoves.stream()
@@ -136,6 +140,7 @@ public class Gameplay {
                 }
                 case "5"-> {
                     ws.leaveGame(auth, gameInfo.gameID());
+                    PostLogin.help();
                     PostLogin.postLoginCommands(port, auth);
                 }
                 case "6" -> {

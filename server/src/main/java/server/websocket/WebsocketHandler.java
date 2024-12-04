@@ -182,7 +182,7 @@ public class WebsocketHandler {
             }
             if(!endGame.isEmpty()){
                 game.setIsGameOver(true);
-                String gameOver = opposingColor + "is in " + endGame + ". Game Over";
+                String gameOver = opposingUser + "is in " + endGame + ". Game Over. Press 5 to leave the game";
                 Notification gameOverNotification = new Notification("Notification: " + gameOver + "\n");
                 String stringGameOver = new Gson().toJson(gameOverNotification);
                 connections.sendToConnection(session, stringGameOver);

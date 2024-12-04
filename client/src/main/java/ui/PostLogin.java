@@ -28,7 +28,7 @@ public class PostLogin {
         evalCommand(decodeCommand, func, port, authToken);
     }
 
-    private static void help(){
+    public static void help(){
         System.out.println(SET_TEXT_COLOR_BLUE + "Options: \n" +
                 "\t1.Create game: \"1\", <GAME NAME> \n" +
                 "\t2.List games: \"2\" \n" +
