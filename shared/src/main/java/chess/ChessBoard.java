@@ -29,6 +29,10 @@ public class ChessBoard {
         board[position.getRow()][position.getColumn()] = piece;
     }
 
+    public void addPieceByIndex(int row, int col, ChessPiece piece){
+        board[row][col] = piece;
+    }
+
     /**
      * Gets a chess piece on the chessboard
      *
@@ -105,6 +109,10 @@ public class ChessBoard {
             }
         }
         return copy;
+    }
+
+    public ChessPiece[][] getBoard(){
+        return board;
     }
 
     @Override

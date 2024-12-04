@@ -49,7 +49,7 @@ public class PostLogin {
     private static void gameHelp(){
         System.out.println(SET_TEXT_COLOR_BLUE + "Options: \n" +
                 "\t1.Redraw board: \"1\" \n" +
-                "\t2.Move: \"3\", <START POSITION> <END POSITION> <PROMOPIECE(only if applicable)> \n" +
+                "\t2.Move: \"2\", <START POSITION> <END POSITION> <PROMOPIECE(only if applicable)> \n" +
                 "\t3.Highlight possible moves: \"3\" <POSITION>\n" +
                 "\t4.Resign: \"4\" \n" +
                 "\t5.Leave: \"5\" \n" +
@@ -152,44 +152,13 @@ public class PostLogin {
             NotificationHandler handler = new NotificationHandler();
             WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken.authToken(), gameId, handler);
             ws.connectGame(authToken, gameId, ChessGame.TeamColor.valueOf(playerColor));
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game " + gameId + " as " + playerColor + "\n");
-            String board = BoardDrawer.printBoard(game.game().getBoard(), join.playerColor());
-            System.out.println(board);
 
             gameHelp();
-            Gameplay.gameplayCommands(port, authToken, gameId);
-//            Scanner input = new Scanner(System.in);
-//            String command;
-//            String[] decodeCommand;
-//
-//            joinOptions();
-//            while(true){
-//                command = input.nextLine();;
-//                if(command.isEmpty()){
-//                    System.out.println("Please enter a command or press 3 for help \n");
-//                }
-//                decodeCommand = command.split(" ");
-//                if(decodeCommand[0].equals("2")){
-//                    System.out.println("You have resigned \n");
-//                    break;
-//                }
-//                evalJoin(decodeCommand, board);
-//            }
-//            help();
-//            postLoginCommands(port,authToken);
+            Gameplay.gameplayCommands(port, authToken, game);
         }
         catch (Exception e){
             System.out.println(RESET_TEXT_COLOR + e.getMessage());
             postLoginCommands(port, authToken);
-        }
-    }
-
-    private static void evalJoin(String[] decodeCommand, String board){
-        if(decodeCommand[0].equals("1")){
-            System.out.println(board);
-        }
-        else if (decodeCommand[0].equals("3")) {
-            joinOptions();
         }
     }
 

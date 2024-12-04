@@ -5,9 +5,11 @@ import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.Map;
 
+import static chess.ChessPiece.PieceType.*;
 import static ui.EscapeSequences.*;
 
 public class BoardDrawer {
@@ -54,7 +56,7 @@ public class BoardDrawer {
                 int colIndex = isWhite ? col : (7 - col);
                 String squareColor = getSquareColor(row, colIndex, isWhite);
 
-                ChessPosition move = new ChessPosition(row, colIndex);
+                ChessPosition move = new ChessPosition(rIndex + 1, colIndex + 1);
                 if(validMoves.contains(move)){
                     squareColor = SET_BG_COLOR_MAGENTA;
                 }
@@ -121,4 +123,33 @@ public class BoardDrawer {
         }
         return pieceChar;
     }
+
+    public static final Map<Character, Integer> interpretCol = new HashMap<>(){{
+      put('a', 1);
+      put('b', 2);
+      put('c', 3);
+      put('d', 4);
+      put('e', 5);
+      put('f', 6);
+      put('g', 7);
+      put('h', 8);
+    }};
+
+    public static final Map<Character, Integer> interpretRow = new HashMap<>(){{
+        put('1', 1);
+        put('2', 2);
+        put('3', 3);
+        put('4', 4);
+        put('5', 5);
+        put('6', 6);
+        put('7', 7);
+        put('8', 8);
+    }};
+
+    public static final Map<Character, ChessPiece.PieceType> interpretPiece = new HashMap<>(){{
+        put('b', BISHOP);
+        put('k', KNIGHT);
+        put('q', QUEEN);
+        put('r', ROOK);
+    }};
 }

@@ -4,6 +4,7 @@ import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
 import model.AuthData;
+import serializers.JsonSerializerRegistrar;
 import ui.BoardDrawer;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
@@ -44,12 +45,6 @@ public class WebsocketClient extends Endpoint {
         send(message);
     }
 
-    public void redrawGame(AuthData authToken, Integer gameId) throws Exception {
-        Redraw game = new Redraw(authToken.authToken(), gameId);
-        var message = new Gson().toJson(game);
-        send(message);
-    }
-
     public void send(String message) throws Exception {
         this.session.getBasicRemote().sendText(message);
     }
@@ -71,9 +66,9 @@ public class WebsocketClient extends Endpoint {
                     var type = serverMessage.getServerMessageType();
                     switch (type){
                         case LOAD_GAME -> {
-                            LoadGame game = new Gson().fromJson(s, LoadGame.class);
+                            LoadGame game = JsonSerializerRegistrar.getChessGameGSON().fromJson(s, LoadGame.class);
                             ChessGame.TeamColor color = game.getTeamColor();
-                            BoardDrawer.printBoard(game.getGame().getBoard(), String.valueOf(color));
+                            System.out.println(BoardDrawer.printBoard(game.getGame().getBoard(), String.valueOf(color)));
                         }
                         case NOTIFICATION -> {
                             Notification notification = new Gson().fromJson(s, Notification.class);
