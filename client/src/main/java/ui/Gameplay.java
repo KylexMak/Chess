@@ -136,7 +136,7 @@ public class Gameplay {
                 }
                 case "5"-> {
                     ws.leaveGame(auth, gameInfo.gameID());
-                    gameplayCommands(port, auth, gameInfo);
+                    PostLogin.postLoginCommands(port, auth);
                 }
                 case "6" -> {
                     gameHelp();

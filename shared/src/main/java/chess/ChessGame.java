@@ -68,7 +68,7 @@ public class ChessGame {
         for(ChessMove move : moves){
             activeGame.addPiece(move.getStartPosition(), null);
             activeGame.addPiece(move.getEndPosition(), piece);
-            if(!isInCheck(piece.getTeamColor())) {
+            if(!isInCheck(piece.getTeamColor(), activeGame)) {
                 validMoves.add(move);
             }
            activeGame = board.copy();
@@ -123,7 +123,10 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    public boolean isInCheck(TeamColor teamColor) {
+    public boolean isInCheck(TeamColor teamColor){
+        return isInCheck(teamColor, board);
+    }
+    public boolean isInCheck(TeamColor teamColor, ChessBoard board) {
         ChessPosition kingPosition = findKing(board, teamColor);
         for(int i = 1; i <= 8; i++){
             for(int j = 1; j <= 8; j++){

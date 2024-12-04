@@ -173,29 +173,27 @@ public class WebsocketHandler {
             String stringNotification = new Gson().toJson(notification);
             connections.broadcastMessage(gameId, authToken, stringNotification);
 
-            if(game.isInCheck(game.getTeamTurn())){
+            String endGame = "";
+            if(game.isInCheckmate(game.getTeamTurn())){
+                endGame = "checkmate";
+            }
+            else if(game.isInStalemate(game.getTeamTurn())){
+                endGame = "stalemate";
+            }
+            if(!endGame.isEmpty()){
+                game.setIsGameOver(true);
+                String gameOver = opposingColor + "is in " + endGame + ". Game Over";
+                Notification gameOverNotification = new Notification("Notification: " + gameOver + "\n");
+                String stringGameOver = new Gson().toJson(gameOverNotification);
+                connections.sendToConnection(session, stringGameOver);
+                connections.broadcastMessage(gameId, authToken, stringGameOver);
+            }
+            else if(game.isInCheck(game.getTeamTurn())){
                 String check = opposingUser + " playing as " + opposingColor + " is in check";
                 Notification checkNotification = new Notification("Notification: " + check + "\n");
                 String stringCheckNotification = new Gson().toJson(checkNotification);
                 connections.sendToConnection(session, stringCheckNotification);
                 connections.broadcastMessage(gameId, authToken, stringCheckNotification);
-            }
-            else{
-                String endGame = "";
-                if(game.isInCheckmate(game.getTeamTurn())){
-                    endGame = "checkmate";
-                }
-                else if(game.isInStalemate(game.getTeamTurn())){
-                    endGame = "stalemate";
-                }
-                if(!endGame.isEmpty()){
-                    game.setIsGameOver(true);
-                    String gameOver = opposingColor + "is in " + endGame + ". Game Over";
-                    Notification gameOverNotification = new Notification("Notification: " + gameOver + "\n");
-                    String stringGameOver = new Gson().toJson(gameOverNotification);
-                    connections.sendToConnection(session, stringGameOver);
-                    connections.broadcastMessage(gameId, authToken, stringGameOver);
-                }
             }
             GameData gameToUpdate = new GameData(actual.gameID(), actual.whiteUsername(), actual.blackUsername(), actual.gameName(), game);
             gameService.updateGame(gameToUpdate);
