@@ -62,12 +62,24 @@ public class WebsocketHandler {
             ListGames games = gameService.listGames(player.getAuthToken());
             GameData game = null;
             int gameId = 0;
-            if(!games.games().isEmpty()){
-                game = games.games().get(player.getGameID() - 1);
-                gameId = game.gameID();
+            try{
+                if(!games.games().isEmpty()){
+                    game = games.games().get(player.getGameID() - 1);
+                    gameId = game.gameID();
+                }
+            }
+            catch(Exception e){
+                gameId = player.getGameID();
+                game = gameService.getGame(gameId);
             }
             ChessGame.TeamColor color = player.getTeamColor();
             AuthData user = authService.getAuthData(authToken);
+            if(Objects.equals(user.username(), game.whiteUsername())){
+                color = ChessGame.TeamColor.WHITE;
+            }
+            if(Objects.equals(user.username(), game.blackUsername())){
+                color = ChessGame.TeamColor.BLACK;
+            }
             if(user == null){
                 throw new Exception("Error: Unauthorized");
             }

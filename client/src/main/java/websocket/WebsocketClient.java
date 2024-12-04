@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import model.AuthData;
 import serializers.JsonSerializerRegistrar;
 import ui.BoardDrawer;
+import ui.Gameplay;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGame;
@@ -49,10 +50,10 @@ public class WebsocketClient extends Endpoint {
         this.session.getBasicRemote().sendText(message);
     }
 
-    public WebsocketClient(String url, String authToken, Integer gameId, NotificationHandler notificationHandler) {
+    public WebsocketClient(String url, AuthData authToken, Integer gameId, NotificationHandler notificationHandler) {
         try{
             url = url.replace("http", "ws");
-            URI socketURI = new URI(url + "/connect");
+            URI socketURI = new URI(url + "/ws");
             this.notificationHandler = notificationHandler;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
@@ -68,7 +69,7 @@ public class WebsocketClient extends Endpoint {
                         case LOAD_GAME -> {
                             LoadGame game = JsonSerializerRegistrar.getChessGameGSON().fromJson(s, LoadGame.class);
                             ChessGame.TeamColor color = game.getTeamColor();
-                            System.out.println(BoardDrawer.printBoard(game.getGame().getBoard(), String.valueOf(color)));
+                            Gameplay.redraw(game.getGame().getBoard(), authToken);
                         }
                         case NOTIFICATION -> {
                             Notification notification = new Gson().fromJson(s, Notification.class);

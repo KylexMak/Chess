@@ -105,25 +105,10 @@ public class PostLogin {
             ListGames games = func.listGames(authToken);
             GameData game = func.joinGame(authToken,
                     new JoinGameRequest(null, games.games().get(gameID - 1).gameID(), true));
-            System.out.println(RESET_TEXT_COLOR + authToken.username() + " successfully joined game as an observer!\n");
-            String board = BoardDrawer.printBoard(game.game().getBoard(), "WHITE");
-            System.out.println(board);
-            Scanner input = new Scanner(System.in);
-            String command;
-            String[] decodeCommand;
-            observeOptions();
-            while(true){
-                command = input.nextLine();;
-                if(command.isEmpty()){
-                    System.out.println("Please enter a command or press 2 for help\n");
-                }
-                decodeCommand = command.split(" ");
-                if(decodeCommand[0].equals("1")){
-                    System.out.println("You have left the game \n");
-                    break;
-                }
-                evalObserve(decodeCommand);
-            }
+            NotificationHandler handler = new NotificationHandler();
+            WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken, gameID, handler);
+            ws.connectGame(authToken, gameID, null);
+
             help();
             postLoginCommands(port, authToken);
         }
@@ -150,7 +135,7 @@ public class PostLogin {
             JoinGameRequest join = new JoinGameRequest(playerColor, games.games().get(gameId - 1).gameID(), false);
             game = func.joinGame(authToken, join);
             NotificationHandler handler = new NotificationHandler();
-            WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken.authToken(), gameId, handler);
+            WebsocketClient ws = new WebsocketClient(func.serverUrl, authToken, gameId, handler);
             ws.connectGame(authToken, gameId, ChessGame.TeamColor.valueOf(playerColor));
 
             gameHelp();
