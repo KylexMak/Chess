@@ -196,6 +196,8 @@ public class ChessGame {
             board.addPiece(move.getEndPosition(), piece);
             board.addPiece(move.getStartPosition(), null);
             if(!isInCheck(teamColor)){
+                board.addPiece(move.getEndPosition(), null);
+                board.addPiece(move.getStartPosition(), piece);
                 return true;
             }
             board.addPiece(move.getEndPosition(), null);

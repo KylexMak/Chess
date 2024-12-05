@@ -140,6 +140,10 @@ public class WebsocketHandler {
             String endString = interpretPositionString(end);
             ChessBoard board = game.getBoard();
             ChessPiece piece = board.getPiece(start);
+
+            if(piece == null){
+                throw new Exception("Error: There is no piece here. Please pick another square.");
+            }
             String pieceString = interpretPieceTypeString(piece.getPieceType());
 
             if(piece.getTeamColor() != user.color){
@@ -297,7 +301,7 @@ public class WebsocketHandler {
         char rowChar = INTERPRET_ROW.get(row);
         char colChar = INTERPRET_COL.get(col);
 
-        return rowChar + String.valueOf(colChar);
+        return String.valueOf(colChar) + rowChar;
     }
 
     public static String interpretPieceTypeString(ChessPiece.PieceType type){

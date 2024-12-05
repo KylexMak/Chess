@@ -127,6 +127,39 @@ public class Gameplay {
                 "\t6.Print this message: \"6\" \n");
     }
 
+    private static void resignConfirmation(int port, AuthData auth, GameData game) throws Exception {
+        System.out.println("Are you sure you want to resign? y/n \n");
+        Scanner input = new Scanner(System.in);
+        String command = input.nextLine();
+        String[] decodeCommand = new String[0];
+        if(command.isEmpty()){
+            System.out.println("Please enter a command or press 6 for help");
+            gameplayCommands(port, auth, game);
+        }
+        else{
+            decodeCommand = command.split(" ");
+        }
+
+        if(decodeCommand.length == 1){
+            String result = decodeCommand[0].toLowerCase();
+            if(Objects.equals(result, "y")){
+                ws.resignGame(auth, game.gameID());
+            }
+            else if(result.equals("n")){
+                System.out.println("Resignation canceled \n");
+                gameplayCommands(port, auth, game);
+            }
+            else{
+                System.out.println("Command not recognized. You may have added too many parameters. \n");
+                resignConfirmation(port, auth, game);
+            }
+        }
+        else{
+            System.out.println("Command not recognized. You may have added too many parameters. Please type 6 for help. \n");
+            resignConfirmation(port, auth, game);
+        }
+    }
+
     private static void evalCommand(String[] decodeCommand, int port, AuthData auth, GameData gameInfo) throws Exception {
         if(decodeCommand.length == 1){
             switch(decodeCommand[0]){
@@ -135,7 +168,7 @@ public class Gameplay {
                     gameplayCommands(port, auth, gameInfo);
                 }
                 case "4" -> {
-                    ws.resignGame(auth, gameInfo.gameID());
+                    resignConfirmation(port, auth, gameInfo);
                     gameplayCommands(port, auth, gameInfo);
                 }
                 case "5"-> {
